@@ -72,16 +72,17 @@
     <style name="CardImageViewStyle">
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:padding">10dp</item>
-        <item name="android:layout_height">95dp</item>
         <item name="android:layout_width">95dp</item>
+        <item name="android:layout_height">100dp</item>
         <item name="android:background">@drawable/img</item>
+        <item name="android:scaleType">fitXY</item>
     </style>
 
     <style name="BaseCardTextStyle" parent="BaseLayoutParam">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_toLeftOf">@id/card_share_overflow</item>
-        <item name="android:layout_toRightOf">@id/thumbnail_image</item>
-        <item name="android:layout_below">@id/question_title</item>
+        <item name="android:layout_toRightOf">@id/top_movie_item_icon</item>
+        <item name="android:layout_below">@id/top_movie_item_name</item>
         <item name="android:paddingLeft">15dp</item>
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingRight">15dp</item>
