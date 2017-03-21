@@ -7,6 +7,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.study.whutwf.doubanmovie.utils.Utils;
+
 public class ScrollingFABBehavior extends FloatingActionButton.Behavior {
     private int toolbarHeight;
 

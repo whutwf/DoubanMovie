@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 
 import com.study.whutwf.doubanmovie.R;
 import com.study.whutwf.doubanmovie.adapter.RecyclerAdapter;
+import com.study.whutwf.doubanmovie.task.FetchMovieItemTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +31,14 @@ public class PartThreeFragment extends Fragment {
         bundle.putInt(ITEMS_COUNT_KEY, itemsCount);
         partThreeFragent.setArguments(bundle);
         return partThreeFragent;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        setRetainInstance(true);
+        super.onCreate(savedInstanceState);
+
+        new FetchMovieItemTask().execute();
     }
 
     @Nullable

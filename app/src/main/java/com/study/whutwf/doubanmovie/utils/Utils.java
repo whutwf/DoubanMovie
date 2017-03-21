@@ -1,4 +1,4 @@
-package com.study.whutwf.doubanmovie.support;
+package com.study.whutwf.doubanmovie.utils;
 
 import android.content.Context;
 import android.content.res.TypedArray;
