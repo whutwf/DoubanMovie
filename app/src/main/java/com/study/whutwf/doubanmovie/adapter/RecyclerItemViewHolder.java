@@ -20,7 +20,7 @@ public class RecyclerItemViewHolder extends RecyclerView.ViewHolder {
     }
 
     public static RecyclerItemViewHolder newInstance(View parent) {
-        TextView itemTextView = (TextView) parent.findViewById(R.id.question_title);
+        TextView itemTextView = (TextView) parent.findViewById(R.id.top_movie_item_name);
         return new RecyclerItemViewHolder(parent, itemTextView);
     }
 

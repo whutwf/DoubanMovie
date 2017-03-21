@@ -25,7 +25,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         Context context = parent.getContext();
-        View view = LayoutInflater.from(context).inflate(R.layout.news_list_item, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.top_movie_item, parent, false);
         return RecyclerItemViewHolder.newInstance(view);
     }
 

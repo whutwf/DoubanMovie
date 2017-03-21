@@ -80,12 +80,9 @@
 
     <style name="BaseCardTextStyle" parent="BaseLayoutParam">
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:layout_toLeftOf">@id/card_share_overflow</item>
-        <item name="android:layout_toRightOf">@id/top_movie_item_icon</item>
-        <item name="android:layout_below">@id/top_movie_item_name</item>
-        <item name="android:paddingLeft">15dp</item>
-        <item name="android:paddingTop">4dp</item>
-        <item name="android:paddingRight">15dp</item>
+        <item name="android:layout_marginLeft">20dp</item>
+        <item name="android:layout_marginTop">8dp</item>
+        <item name="android:layout_marginRight">20dp</item>
         <item name="android:textColor">@android:color/black</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textIsSelectable">false</item>

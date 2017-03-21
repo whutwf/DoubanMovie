@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:android="http://schemas.android.com/apk/res/android"
               xmlns:card_view="http://schemas.android.com/apk/res-auto"
               android:layout_width="match_parent"
               android:layout_height="wrap_content"
+              xmlns:tools="http://schemas.android.com/tools"
               android:orientation="vertical"
               android:paddingBottom="10dp"
               android:paddingLeft="15dp"
@@ -45,7 +45,8 @@
         style="@style/CardStyle"
         android:id="@+id/news_list_card_view"
         card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="4dp">
+        card_view:cardElevation="4dp"
+        android:padding="5dp">
 
         <RelativeLayout
             style="@style/CardRelativeLayoutStyle">
@@ -55,19 +56,64 @@
                 style="@style/CardImageViewStyle"
                 android:contentDescription="@string/news_preview_image"/>
 
+            <ImageView
+                android:id="@+id/top_card_share_overflow"
+                android:contentDescription="@string/share_this_news"
+                style="@style/CardOverflowIconStyle"/>
+
             <TextView
                 android:id="@+id/top_movie_item_name"
                 android:text="这个少收不太冷"
-                style="@style/CardQuestionTitleStyle"/>
+                style="@style/CardQuestionTitleStyle"
+                android:layout_toLeftOf="@id/top_card_share_overflow"
+                android:layout_toRightOf="@id/top_movie_item_icon"/>
 
             <TextView
-                android:id="@+id/daily_title"
-                style="@style/BaseCardTextStyle"/>
+                android:id="@+id/top_movie_item_original_name"
+                android:text="这个少收不太冷"
+                style="@style/BaseCardTextStyle"
+                android:layout_toLeftOf="@id/top_card_share_overflow"
+                android:layout_toRightOf="@id/top_movie_item_icon"
+                android:layout_below="@id/top_movie_item_name"
+                android:textSize="14sp"/>
 
-            <ImageView
-                android:id="@+id/card_share_overflow"
-                android:contentDescription="@string/share_this_news"
-                style="@style/CardOverflowIconStyle"/>
+            <TextView
+                android:id="@+id/top_movie_item_date"
+                android:text="这个少收不太冷"
+                style="@style/BaseCardTextStyle"
+                android:layout_toLeftOf="@id/top_card_share_overflow"
+                android:layout_toRightOf="@id/top_movie_item_icon"
+                android:layout_below="@id/top_movie_item_original_name"
+                android:textSize="12sp"/>
+
+
+            <android.support.v7.widget.AppCompatRatingBar
+                android:id="@+id/ratingBar_hots"
+                style="?android:attr/ratingBarStyle"
+                android:layout_toRightOf="@id/top_movie_item_icon"
+                android:layout_below="@id/top_movie_item_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="3dp"
+                android:isIndicator="true"
+                android:numStars="5"
+                android:stepSize="1"
+                android:progressDrawable="@drawable/rating_bar_bg2"
+                android:rating="1"
+                android:layout_alignBottom="@+id/top_movie_item_icon"/>
+
+            <TextView
+                android:id="@+id/top_movie_item_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/ratingBar_hots"
+                android:layout_below="@id/top_movie_item_date"
+                android:layout_alignBaseline="@id/ratingBar_hots"
+                android:layout_marginLeft="20dp"
+                android:textSize="12sp"
+                android:layout_marginTop="8dp"
+                tools:text="5.8"/>
 
         </RelativeLayout>
 
