@@ -99,9 +99,9 @@
                 android:isIndicator="true"
                 android:numStars="5"
                 android:stepSize="1"
-                android:progressDrawable="@drawable/rating_bar_bg2"
+                android:progressDrawable="@drawable/rating_bar_bg3"
                 android:rating="1"
-                android:layout_alignBottom="@+id/top_movie_item_icon"/>
+                />
 
             <TextView
                 android:id="@+id/top_movie_item_score"
@@ -110,7 +110,6 @@
                 android:layout_toRightOf="@id/ratingBar_hots"
                 android:layout_below="@id/top_movie_item_date"
                 android:layout_alignBaseline="@id/ratingBar_hots"
-                android:layout_marginLeft="20dp"
                 android:textSize="12sp"
                 android:layout_marginTop="8dp"
                 tools:text="5.8"/>
