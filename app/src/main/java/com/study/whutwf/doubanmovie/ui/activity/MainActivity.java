@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.study.whutwf.doubanmovie.R;
+import com.study.whutwf.doubanmovie.ui.fragment.MovieTopFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,9 +30,7 @@ public class MainActivity extends BaseActivity {
         ViewPager viewPager = (ViewPager) findViewById(R.id.main_view_pager);
         viewPager.setOffscreenPageLimit(PAGE_COUNT);
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
-//        pagerAdapter.addFragment(PartThreeFragment.createInstance(20), getString(R.string.tab_1));
-//        pagerAdapter.addFragment(PartThreeFragment.createInstance(4), getString(R.string.tab_2));
-//        pagerAdapter.addFragment(PartThreeFragment.createInstance(4), getString(R.string.tab_2));
+        pagerAdapter.addFragment(MovieTopFragment.newInstance(), getString(R.string.tab_1));
         viewPager.setAdapter(pagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.main_pager_tabs);
         tabLayout.setupWithViewPager(viewPager);

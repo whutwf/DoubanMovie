@@ -62,6 +62,10 @@ public class FetchMovieItemUtils {
             movieItem.setYear(movieSubject.getString("year"));
             movieItem.setOriginalTitle(movieSubject.getString("original_title"));
 
+            Log.i(TAG, "id:" + movieSubject.getString("id"));
+            Log.i(TAG, "title:" + movieSubject.getString("title"));
+            Log.i(TAG, "year:" + movieSubject.getString("year"));
+            Log.i(TAG, "original_title:" + movieSubject.getString("original_title"));
             if (!movieSubject.has("images")) {
                 continue;
             }
