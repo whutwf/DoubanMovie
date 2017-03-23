@@ -1,0 +1,23 @@
+<!-- [ Mirror metadata ] generatedAt: 1490245619279 -->
+<!-- Generated screen file. Fill the id tags below with content with
+which to populate your previewed layout. For a complete specification
+of sample data, please see http://jimulabs.com/sample-data-specifications/ 
+
+Valid attributes on <screen> tag: theme="@style/someTheme" inEditMode="false" overlay="@drawable/mockup" -->
+<screen>
+    <_content layout="@layout/top_movie_item">
+        <!-- TextView Examples:
+        <ranking text="@string/string_resource" />
+        <ranking text="Text literal" textSize="14sp" /> -->
+        <ranking />
+        <!-- ImageView Examples:
+        <top_movie_item_icon src="@drawable/image_resource" />
+        <top_movie_item_icon src="relative_path/image.jpg" /> -->
+        <top_movie_item_icon />
+        <top_card_share_overflow />
+        <top_movie_item_name />
+        <top_movie_item_original_name />
+        <top_movie_item_date />
+        <top_movie_item_score />
+    </_content>
+</screen>

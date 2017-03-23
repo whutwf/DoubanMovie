@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.study.whutwf.doubanmovie.R;
-import com.study.whutwf.doubanmovie.adapter.RecyclerAdapter;
+import com.study.whutwf.doubanmovie.adapter.MovieTopAdapter;
 import com.study.whutwf.doubanmovie.task.FetchMovieItemTask;
 
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ public class PartThreeFragment extends Fragment {
 
     public void setupRecyclerView(RecyclerView recyclerView) {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(createItemList());
+        MovieTopAdapter recyclerAdapter = new MovieTopAdapter(createItemList());
         recyclerView.setAdapter(recyclerAdapter);
     }
 

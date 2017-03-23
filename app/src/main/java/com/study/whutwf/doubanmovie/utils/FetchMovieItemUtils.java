@@ -24,7 +24,9 @@ public class FetchMovieItemUtils {
 
     public FetchMovieItemUtils() {}
 
-    public void fetchMovieTop250Items() {
+    public List<MovieItem> fetchMovieTop250Items() {
+        List<MovieItem> movieItems = new ArrayList<>();
+
         String url = Uri.parse(Constants.Urls.DOUBAN_MOVIE_TOP250)
                 .buildUpon()
                 .appendQueryParameter("start", "0")
@@ -34,6 +36,7 @@ public class FetchMovieItemUtils {
             String top250JsonString = NetworkUtils.getUrlString(url);
             Log.i(TAG, "Received Json from top250: " + top250JsonString);
             JSONObject top250JsonBody = new JSONObject(top250JsonString);
+            parseTop250Items(movieItems, top250JsonBody);
         }  catch (JSONException e) {
             Log.e(TAG, "Failed to parse Json");
             e.printStackTrace();
@@ -41,6 +44,8 @@ public class FetchMovieItemUtils {
             Log.e(TAG, "Failed to fetch items", e);
             e.printStackTrace();
         }
+
+        return movieItems;
     }
 
     private void parseTop250Items(List<MovieItem> movieItems, JSONObject movieJsonObj) throws JSONException {
