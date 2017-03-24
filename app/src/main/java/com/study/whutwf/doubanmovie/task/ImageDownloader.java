@@ -25,6 +25,7 @@ public class ImageDownloader<T> extends HandlerThread {
     private Boolean mHasQuit = false;
     private Handler mImageRequestHandler;
     private ConcurrentMap<T, String> mImageRequestMap = new ConcurrentHashMap<>();
+    //接收UI线程的Handler
     private Handler mResponseHandler;
     private ImageDownloadListener<T> mImageDownloadListener;
 
@@ -36,8 +37,9 @@ public class ImageDownloader<T> extends HandlerThread {
         mImageDownloadListener = listener;
     }
 
-    public ImageDownloader() {
+    public ImageDownloader(Handler responseHandler) {
         super(TAG);
+        mResponseHandler = responseHandler;
     }
 
     public void queueTargetImage(T target, String url) {
@@ -72,7 +74,11 @@ public class ImageDownloader<T> extends HandlerThread {
         };
     }
 
-    private void handleRequest(T target) {
+    public void clearQueue() {
+        mImageRequestHandler.removeMessages(MESSAGE_DOWNLOAD);
+    }
+
+    private void handleRequest(final T target) {
         final String imageUrl = mImageRequestMap.get(target);
 
         if (imageUrl == null) {
@@ -84,6 +90,18 @@ public class ImageDownloader<T> extends HandlerThread {
             final Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
 
             Log.i(TAG, "Bitmap created");
+
+            mResponseHandler.post(new Runnable() {
+                @Override
+                public void run() {
+                    if (mImageRequestMap.get(target) != imageUrl || mHasQuit) {
+                        return;
+                    }
+
+                    mImageRequestMap.remove(target);
+                    mImageDownloadListener.onImageDownloaded(target, bitmap);
+                }
+            });
         } catch (IOException e) {
             Log.e(TAG, "error downloading image", e);
             e.printStackTrace();

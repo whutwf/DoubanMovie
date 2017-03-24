@@ -1,8 +1,12 @@
 package com.study.whutwf.doubanmovie.ui.fragment;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.study.whutwf.doubanmovie.R;
@@ -43,7 +48,18 @@ public class MovieTopFragment extends Fragment {
         super.onCreate(savedInstanceState);
         new FetchMovieItemTask().execute();
 
-        mMovieTopItemViewHolderImageDownloader = new ImageDownloader<>();
+        Handler responseHandler = new Handler();
+
+        mMovieTopItemViewHolderImageDownloader = new ImageDownloader<>(responseHandler);
+        mMovieTopItemViewHolderImageDownloader.setImageDownloadListener(
+                new ImageDownloader.ImageDownloadListener<MovieTopItemViewHolder>() {
+                    @Override
+                    public void onImageDownloaded(MovieTopItemViewHolder targetHolder, Bitmap bitmap) {
+                        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+                        targetHolder.setTopMovieCover(drawable);
+
+                    }
+                });
         mMovieTopItemViewHolderImageDownloader.start();
         mMovieTopItemViewHolderImageDownloader.getLooper();
         Log.i(TAG, "Background thread started");
@@ -63,6 +79,11 @@ public class MovieTopFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        mMovieTopItemViewHolderImageDownloader.clearQueue();
+    }
 
     @Override
     public void onDestroy() {
@@ -113,7 +134,7 @@ public class MovieTopFragment extends Fragment {
             MovieItem movieItem = mMovieItemList.get(position);
             holder.setTopMovieItem(movieItem);
 
-            mMovieTopItemViewHolderImageDownloader.queueTargetImage((MovieTopItemViewHolder) viewHolder, movieItem.getImageUrls().get(2));
+            mMovieTopItemViewHolderImageDownloader.queueTargetImage((MovieTopItemViewHolder) viewHolder, movieItem.getImageUrls().get(1));
 
         }
 
@@ -127,11 +148,13 @@ public class MovieTopFragment extends Fragment {
 
         private TextView mMovieNameTextView;
         private TextView mMovieYearTextView;
+        private ImageView mMovieCoverImageView;
 
         public MovieTopItemViewHolder(View itemView) {
             super(itemView);
             mMovieNameTextView = (TextView) itemView.findViewById(R.id.top_movie_item_name);
             mMovieYearTextView = (TextView) itemView.findViewById(R.id.top_movie_item_date);
+            mMovieCoverImageView = (ImageView) itemView.findViewById(R.id.top_movie_item_cover);
         }
 
         public static MovieTopItemViewHolder newInstance(View parent) {
@@ -141,6 +164,10 @@ public class MovieTopFragment extends Fragment {
         public void setTopMovieItem(MovieItem movieItem) {
             mMovieNameTextView.setText(movieItem.getTitle());
             mMovieYearTextView.setText(movieItem.getYear());
+        }
+
+        public void setTopMovieCover(Drawable drawable) {
+            mMovieCoverImageView.setImageDrawable(drawable);
         }
 
     }
