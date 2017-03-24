@@ -11,11 +11,11 @@ import java.util.List;
  * Created by whutw on 2017/3/21 0021.
  */
 
-public class FetchMovieItemTask extends AsyncTask<Void, Void, List<MovieItem>> {
+public class FetchMovieItemTask extends AsyncTask<Integer, Void, List<MovieItem>> {
     @Override
-    protected List<MovieItem> doInBackground(Void... params) {
+    protected List<MovieItem> doInBackground(Integer... params) {
 
-        return new FetchMovieItemUtils().fetchMovieTop250Items();
+        return new FetchMovieItemUtils().fetchMovieTop250Items(params[0]);
     }
 
     @Override

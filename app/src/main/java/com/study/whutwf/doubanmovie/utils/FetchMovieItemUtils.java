@@ -24,12 +24,12 @@ public class FetchMovieItemUtils {
 
     public FetchMovieItemUtils() {}
 
-    public List<MovieItem> fetchMovieTop250Items() {
+    public List<MovieItem> fetchMovieTop250Items(Integer page) {
         List<MovieItem> movieItems = new ArrayList<>();
 
         String url = Uri.parse(Constants.Urls.DOUBAN_MOVIE_TOP250)
                 .buildUpon()
-                .appendQueryParameter("start", "0")
+                .appendQueryParameter(Constants.Params.DOUBAN_MOVIE_TOP250_START, page.toString())
                 .build().toString();
 
         try {

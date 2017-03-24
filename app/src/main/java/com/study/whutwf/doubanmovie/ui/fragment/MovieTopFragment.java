@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.study.whutwf.doubanmovie.R;
 import com.study.whutwf.doubanmovie.bean.MovieItem;
@@ -34,10 +35,17 @@ public class MovieTopFragment extends Fragment {
 
     private static final String TAG = "MovieTopFragment";
 
+    private static final int END_START_PAGE = 13;
+
     private RecyclerView mMovieTopRecyclerView;
     private List<MovieItem> mMovieItemList = new ArrayList<>();
+    private MovieTopAdapter mMovieTopAdapter;
 
     private  ImageDownloader<MovieTopItemViewHolder> mMovieTopItemViewHolderImageDownloader;
+    private int mTopLastPositon;
+    private int mTopStarPage = 0;
+    private int mTopFetchedPage = 0;
+
 
     public static MovieTopFragment newInstance() {
         return new MovieTopFragment();
@@ -46,7 +54,7 @@ public class MovieTopFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new FetchMovieItemTask().execute();
+        new FetchMovieItemTask().execute(mTopStarPage);
 
         Handler responseHandler = new Handler();
 
@@ -74,7 +82,6 @@ public class MovieTopFragment extends Fragment {
         mMovieTopRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
         setupAdapter();
-
         //这个位置要注意啊，要返回自己的v，否则返回空视图
         return v;
     }
@@ -94,22 +101,63 @@ public class MovieTopFragment extends Fragment {
 
     public  void setupAdapter() {
         if (isAdded()) {
-            MovieTopAdapter recyclerAdapter = new MovieTopAdapter(mMovieItemList);
-            mMovieTopRecyclerView.setAdapter(recyclerAdapter);
+            mMovieTopAdapter = new MovieTopAdapter(mMovieItemList);
+            mMovieTopRecyclerView.setAdapter(mMovieTopAdapter);
+            mMovieTopRecyclerView.addOnScrollListener(topMovieScrollListener);
         }
     }
 
-    private class FetchMovieItemTask extends AsyncTask<Void, Void, List<MovieItem>> {
+    private RecyclerView.OnScrollListener topMovieScrollListener = new RecyclerView.OnScrollListener() {
         @Override
-        protected List<MovieItem> doInBackground(Void... params) {
+        public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+            super.onScrolled(recyclerView, dx, dy);
+        }
 
-            return new FetchMovieItemUtils().fetchMovieTop250Items();
+        @Override
+        public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            super.onScrollStateChanged(recyclerView, newState);
+
+            //首先获取LayoutManager
+            LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
+            //找到最后显示的位置，一旦滚动就会获得此位置
+            mTopLastPositon = layoutManager.findLastVisibleItemPosition();
+
+            //SCROLL_STATE_IDLE: 视图没有被拖动，处于静止
+            //SCROLL_STATE_DRAGGING： 视图正在拖动中
+            //SCROLL_STATE_SETTLING： 视图在惯性滚动
+            if ((newState == RecyclerView.SCROLL_STATE_IDLE)
+                    && (mTopLastPositon >= mMovieTopAdapter.getItemCount() - 1)
+                    && (mTopStarPage == mTopFetchedPage - 1)) {
+                Toast.makeText(getActivity(), "waiting to load ....", Toast.LENGTH_LONG).show();
+                mTopStarPage++;
+                if (mTopStarPage <= END_START_PAGE) {
+                    Toast.makeText(getActivity(), "waiting to load ....", Toast.LENGTH_LONG).show();
+                    new FetchMovieItemTask().execute(mTopStarPage);
+                } else {
+                    Toast.makeText(getActivity(), "This is the end ....", Toast.LENGTH_LONG).show();
+                }
+
+            }
+        }
+    };
+
+    //注意参数这个位置Integer
+    private class FetchMovieItemTask extends AsyncTask<Integer, Void, List<MovieItem>> {
+        @Override
+        protected List<MovieItem> doInBackground(Integer... params) {
+
+            return new FetchMovieItemUtils().fetchMovieTop250Items(params[0]);
         }
 
         @Override
         protected void onPostExecute(List<MovieItem> movieItems) {
-            mMovieItemList = movieItems;
+            if (mMovieItemList != null) {
+                mMovieItemList.addAll(movieItems);
+            } else {
+                mMovieItemList = movieItems;
+            }
             setupAdapter();
+            mTopFetchedPage++;
         }
     }
 
