@@ -43,7 +43,6 @@ public class ImageDownloader<T> extends HandlerThread {
     }
 
     public void queueTargetImage(T target, String url) {
-        Log.i(TAG, "Got a URL " + url);
 
         if (url == null) {
             mImageRequestMap.remove(target);
@@ -67,7 +66,6 @@ public class ImageDownloader<T> extends HandlerThread {
             public void handleMessage(Message msg) {
                 if (msg.what == MESSAGE_DOWNLOAD) {
                     T target = (T) msg.obj;
-                    Log.i(TAG, "Got a request for URL:" + mImageRequestMap.get(target));
                     handleRequest(target);
                 }
             }
@@ -88,8 +86,6 @@ public class ImageDownloader<T> extends HandlerThread {
         try {
             byte[] bitmapBytes = NetworkUtils.getUrlBytes(imageUrl);
             final Bitmap bitmap = BitmapFactory.decodeByteArray(bitmapBytes, 0, bitmapBytes.length);
-
-            Log.i(TAG, "Bitmap created");
 
             mResponseHandler.post(new Runnable() {
                 @Override

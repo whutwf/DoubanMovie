@@ -34,7 +34,6 @@ public class FetchMovieItemUtils {
 
         try {
             String top250JsonString = NetworkUtils.getUrlString(url);
-            Log.i(TAG, "Received Json from top250: " + top250JsonString);
             JSONObject top250JsonBody = new JSONObject(top250JsonString);
             parseTop250Items(movieItems, top250JsonBody);
         }  catch (JSONException e) {
@@ -62,10 +61,6 @@ public class FetchMovieItemUtils {
             movieItem.setYear(movieSubject.getString("year"));
             movieItem.setOriginalTitle(movieSubject.getString("original_title"));
 
-            Log.i(TAG, "id:" + movieSubject.getString("id"));
-            Log.i(TAG, "title:" + movieSubject.getString("title"));
-            Log.i(TAG, "year:" + movieSubject.getString("year"));
-            Log.i(TAG, "original_title:" + movieSubject.getString("original_title"));
             if (!movieSubject.has("images")) {
                 continue;
             }

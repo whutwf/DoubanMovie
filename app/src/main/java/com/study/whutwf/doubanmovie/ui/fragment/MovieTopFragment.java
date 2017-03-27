@@ -35,7 +35,7 @@ public class MovieTopFragment extends Fragment {
 
     private static final String TAG = "MovieTopFragment";
 
-    private static final int END_START_PAGE = 13;
+    private static final int END_START_PAGE = 240;
 
     private RecyclerView mMovieTopRecyclerView;
     private List<MovieItem> mMovieItemList = new ArrayList<>();
@@ -44,7 +44,8 @@ public class MovieTopFragment extends Fragment {
     private  ImageDownloader<MovieTopItemViewHolder> mMovieTopItemViewHolderImageDownloader;
     private int mTopLastPositon;
     private int mTopStarPage = 0;
-    private int mTopFetchedPage = 0;
+    private int lastOffset;
+    private int lastPosition;
 
 
     public static MovieTopFragment newInstance() {
@@ -70,7 +71,6 @@ public class MovieTopFragment extends Fragment {
                 });
         mMovieTopItemViewHolderImageDownloader.start();
         mMovieTopItemViewHolderImageDownloader.getLooper();
-        Log.i(TAG, "Background thread started");
     }
 
     @Nullable
@@ -80,7 +80,7 @@ public class MovieTopFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_movie_list, container, false);
         mMovieTopRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_movie_list_recycler_view);
         mMovieTopRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-
+        mMovieTopRecyclerView.addOnScrollListener(topMovieScrollListener);
         setupAdapter();
         //这个位置要注意啊，要返回自己的v，否则返回空视图
         return v;
@@ -96,14 +96,41 @@ public class MovieTopFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         mMovieTopItemViewHolderImageDownloader.quit();
-        Log.i(TAG, "Background thread destroyed");
     }
 
     public  void setupAdapter() {
         if (isAdded()) {
             mMovieTopAdapter = new MovieTopAdapter(mMovieItemList);
             mMovieTopRecyclerView.setAdapter(mMovieTopAdapter);
-            mMovieTopRecyclerView.addOnScrollListener(topMovieScrollListener);
+            scrollToPosition();
+        }
+    }
+
+
+    /**
+     * 记录RecyclerView滚动位置并恢复
+     */
+    /**
+     * 记录RecyclerView当前位置
+     */
+    private void getPositionAndOffset() {
+        LinearLayoutManager layoutManager = (LinearLayoutManager) mMovieTopRecyclerView.getLayoutManager();
+        //获取可视的第一个view
+        View topView = layoutManager.getChildAt(0);
+        if(topView != null) {
+            //获取与该view的顶部的偏移量
+            lastOffset = topView.getTop();
+            //得到该View的数组位置
+            lastPosition = layoutManager.getPosition(topView);
+        }
+    }
+
+    /**
+     * 让RecyclerView滚动到指定位置
+     */
+    private void scrollToPosition() {
+        if(mMovieTopRecyclerView.getLayoutManager() != null && lastPosition >= 0) {
+            ((LinearLayoutManager) mMovieTopRecyclerView.getLayoutManager()).scrollToPositionWithOffset(lastPosition, lastOffset);
         }
     }
 
@@ -121,15 +148,15 @@ public class MovieTopFragment extends Fragment {
             LinearLayoutManager layoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
             //找到最后显示的位置，一旦滚动就会获得此位置
             mTopLastPositon = layoutManager.findLastVisibleItemPosition();
+            getPositionAndOffset();
+            Log.i(TAG, "Last postion:" + mTopLastPositon);
 
             //SCROLL_STATE_IDLE: 视图没有被拖动，处于静止
             //SCROLL_STATE_DRAGGING： 视图正在拖动中
             //SCROLL_STATE_SETTLING： 视图在惯性滚动
             if ((newState == RecyclerView.SCROLL_STATE_IDLE)
-                    && (mTopLastPositon >= mMovieTopAdapter.getItemCount() - 1)
-                    && (mTopStarPage == mTopFetchedPage - 1)) {
-                Toast.makeText(getActivity(), "waiting to load ....", Toast.LENGTH_LONG).show();
-                mTopStarPage++;
+                    && (mTopLastPositon >= mMovieTopAdapter.getItemCount() - 1)) {
+                mTopStarPage = mTopStarPage + 20;
                 if (mTopStarPage <= END_START_PAGE) {
                     Toast.makeText(getActivity(), "waiting to load ....", Toast.LENGTH_LONG).show();
                     new FetchMovieItemTask().execute(mTopStarPage);
@@ -157,7 +184,6 @@ public class MovieTopFragment extends Fragment {
                 mMovieItemList = movieItems;
             }
             setupAdapter();
-            mTopFetchedPage++;
         }
     }
 
@@ -189,6 +215,11 @@ public class MovieTopFragment extends Fragment {
         @Override
         public int getItemCount() {
             return mMovieItemList == null ? 0 : mMovieItemList.size();
+        }
+
+        public void addData(List<MovieItem> items) {
+            Log.i(TAG, "MovieItem:" + items);
+            mMovieItemList.addAll(items);
         }
     }
 
