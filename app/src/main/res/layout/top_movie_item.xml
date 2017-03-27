@@ -1,52 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:card_view="http://schemas.android.com/apk/res-auto"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              xmlns:tools="http://schemas.android.com/tools"
-              android:orientation="vertical"
-              android:paddingBottom="10dp"
-              android:paddingLeft="15dp"
-              android:paddingRight="15dp"
-              android:paddingTop="10dp">
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+              <!--xmlns:card_view="http://schemas.android.com/apk/res-auto"-->
+              <!--android:layout_width="match_parent"-->
+              <!--android:layout_height="wrap_content"-->
+              <!--xmlns:tools="http://schemas.android.com/tools"-->
+              <!--android:orientation="vertical"-->
+              <!--android:paddingBottom="10dp"-->
+              <!--android:paddingLeft="15dp"-->
+              <!--android:paddingRight="15dp"-->
+              <!--android:paddingTop="10dp">-->
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginBottom="5dp"
-        android:layout_marginTop="10dp">
-        <TextView
-            android:id="@+id/ranking"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="1"
-            android:textSize="20sp"
-            android:textStyle="italic"/>
-        <View
-            android:layout_width="30dp"
-            android:layout_height="2dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toLeftOf="@id/ranking"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="8dp"
-            android:background="@color/color_ranking_view_side"/>
-        <View
-            android:layout_width="30dp"
-            android:layout_height="2dp"
-            android:layout_alignParentBottom="true"
-            android:layout_toRightOf="@id/ranking"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="8dp"
-            android:background="@color/color_ranking_view_side"/>
-    </RelativeLayout>
+    <!--<RelativeLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:layout_marginBottom="5dp"-->
+        <!--android:layout_marginTop="10dp">-->
+        <!--<TextView-->
+            <!--android:id="@+id/ranking"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_centerInParent="true"-->
+            <!--android:text="1"-->
+            <!--android:textSize="20sp"-->
+            <!--android:textStyle="italic"/>-->
+        <!--<View-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="2dp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_toLeftOf="@id/ranking"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginRight="8dp"-->
+            <!--android:background="@color/color_ranking_view_side"/>-->
+        <!--<View-->
+            <!--android:layout_width="30dp"-->
+            <!--android:layout_height="2dp"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_toRightOf="@id/ranking"-->
+            <!--android:layout_marginBottom="10dp"-->
+            <!--android:layout_marginLeft="8dp"-->
+            <!--android:background="@color/color_ranking_view_side"/>-->
+    <!--</RelativeLayout>-->
 
-    <android.support.v7.widget.CardView
-        style="@style/CardStyle"
-        android:id="@+id/news_list_card_view"
-        card_view:cardCornerRadius="4dp"
-        card_view:cardElevation="4dp"
-        android:padding="5dp">
+<android.support.v7.widget.CardView
+    style="@style/CardStyle"
+    android:id="@+id/news_list_card_view"
+    card_view:cardCornerRadius="4dp"
+    card_view:cardElevation="4dp"
+    android:padding="5dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
         <RelativeLayout
             style="@style/CardRelativeLayoutStyle">
@@ -86,9 +89,19 @@
                 android:layout_below="@id/top_movie_item_original_name"
                 android:textSize="12sp"/>
 
+            <TextView
+                android:id="@+id/top_movie_item_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@id/top_movie_item_date"
+                android:layout_below="@id/top_movie_item_original_name"
+                android:textSize="12sp"
+                android:layout_marginTop="8dp"
+                tools:text="5.8"/>
+
 
             <android.support.v7.widget.AppCompatRatingBar
-                android:id="@+id/ratingBar_hots"
+                android:id="@+id/rating_bar_hots"
                 style="?android:attr/ratingBarStyle"
                 android:layout_toRightOf="@id/top_movie_item_cover"
                 android:layout_below="@id/top_movie_item_date"
@@ -98,25 +111,16 @@
                 android:layout_marginTop="3dp"
                 android:isIndicator="true"
                 android:numStars="5"
-                android:stepSize="1"
+                android:stepSize="0.5"
                 android:progressDrawable="@drawable/rating_bar_bg3"
                 android:rating="1"
                 />
 
-            <TextView
-                android:id="@+id/top_movie_item_score"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/ratingBar_hots"
-                android:layout_below="@id/top_movie_item_date"
-                android:layout_alignBaseline="@id/ratingBar_hots"
-                android:textSize="12sp"
-                android:layout_marginTop="8dp"
-                tools:text="5.8"/>
+
 
         </RelativeLayout>
 
 
     </android.support.v7.widget.CardView>
 
-</LinearLayout>
+<!--</LinearLayout>-->

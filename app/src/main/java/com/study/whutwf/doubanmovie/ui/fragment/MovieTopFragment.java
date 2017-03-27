@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.AppCompatRatingBar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -82,6 +83,7 @@ public class MovieTopFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = inflater.inflate(R.layout.fragment_movie_list, container, false);
+
         mMovieTopRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_movie_list_recycler_view);
         mMovieTopRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMovieTopRecyclerView.addOnScrollListener(topMovieScrollListener);
@@ -231,13 +233,19 @@ public class MovieTopFragment extends Fragment {
 
         private TextView mMovieNameTextView;
         private TextView mMovieYearTextView;
+        private TextView mMovieOriginalTitleTextView;
+        private TextView mMovieScoreTextView;
         private ImageView mMovieCoverImageView;
+        private AppCompatRatingBar mAppCompatRatingBar;
 
         public MovieTopItemViewHolder(View itemView) {
             super(itemView);
             mMovieNameTextView = (TextView) itemView.findViewById(R.id.top_movie_item_name);
             mMovieYearTextView = (TextView) itemView.findViewById(R.id.top_movie_item_date);
             mMovieCoverImageView = (ImageView) itemView.findViewById(R.id.top_movie_item_cover);
+            mAppCompatRatingBar = (AppCompatRatingBar) itemView.findViewById(R.id.rating_bar_hots);
+            mMovieOriginalTitleTextView = (TextView) itemView.findViewById(R.id.top_movie_item_original_name);
+            mMovieScoreTextView = (TextView) itemView.findViewById(R.id.top_movie_item_score);
         }
 
         public static MovieTopItemViewHolder newInstance(View parent) {
@@ -246,7 +254,11 @@ public class MovieTopFragment extends Fragment {
 
         public void setTopMovieItem(MovieItem movieItem) {
             mMovieNameTextView.setText(movieItem.getTitle());
+            mMovieOriginalTitleTextView.setText(movieItem.getOriginalTitle());
             mMovieYearTextView.setText(movieItem.getYear());
+            mMovieScoreTextView.setText(movieItem.getRating());
+            mAppCompatRatingBar.setRating(Float.parseFloat(movieItem.getRating()) / 2);
+
         }
 
         public void setTopMovieCover(Drawable drawable) {

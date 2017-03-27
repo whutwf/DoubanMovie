@@ -82,4 +82,11 @@ public class MovieItem {
         mImageUrls = imageUrls;
     }
 
+    public String getRating() {
+        return mRating;
+    }
+
+    public void setRating(String rating) {
+        mRating = rating;
+    }
 }

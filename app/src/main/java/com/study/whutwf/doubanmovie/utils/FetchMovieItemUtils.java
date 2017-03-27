@@ -72,6 +72,9 @@ public class FetchMovieItemUtils {
             imageUrls.add(imagesObject.getString("medium"));
             movieItem.setImageUrls(imageUrls);
 
+            JSONObject ratingObject = movieSubject.getJSONObject("rating");
+            movieItem.setRating(ratingObject.getString("average"));
+
             movieItems.add(movieItem);
         }
     }
