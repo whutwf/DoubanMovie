@@ -12,6 +12,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ public class MovieTopFragment extends Fragment {
     private static final String TAG = "MovieTopFragment";
 
     private static final int END_START_PAGE = 240;
+    private static final int BITMAP_CACHE_SIZE = 4 * 1024 * 1024;   //4MB,多少为合适？
 
     private RecyclerView mMovieTopRecyclerView;
     private List<MovieItem> mMovieItemList = new ArrayList<>();
@@ -46,6 +48,7 @@ public class MovieTopFragment extends Fragment {
     private int mTopStarPage = 0;
     private int lastOffset;
     private int lastPosition;
+    private LruCache<String, Bitmap> mBitmapLruCache;
 
 
     public static MovieTopFragment newInstance() {
@@ -59,7 +62,8 @@ public class MovieTopFragment extends Fragment {
 
         Handler responseHandler = new Handler();
 
-        mMovieTopItemViewHolderImageDownloader = new ImageDownloader<>(responseHandler);
+        mBitmapLruCache = new LruCache<>(BITMAP_CACHE_SIZE);
+        mMovieTopItemViewHolderImageDownloader = new ImageDownloader<>(responseHandler, mBitmapLruCache);
         mMovieTopItemViewHolderImageDownloader.setImageDownloadListener(
                 new ImageDownloader.ImageDownloadListener<MovieTopItemViewHolder>() {
                     @Override
