@@ -16,4 +16,12 @@ public class Constants {
     public static final class Params {
         public static final String DOUBAN_MOVIE_TOP250_START = "start";
     }
+
+    public static final class HelpStrings {
+        public static final String SHARE_FROME_DOUBAN_MOVIE = "分享来自豆瓣电影";
+    }
+
+    public static final class PackageInformation {
+        public static final String DOUBAN_PACKAGE_NAME = "com.douban.frodo";
+    }
 }
