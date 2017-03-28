@@ -5,7 +5,10 @@
     <string name="tab_3">TAB 3</string>
     <string name="news_preview_image">Image Preview</string>
     <string name="share_this_news">Share this news</string>
+    <string name="action_settings">设置</string>
+    <string name="action_go_to_search">Search</string>
     <string name="action_share_url">分享</string>
     <string name="movie_share_to">分享自。。。</string>
     <string name="no_browser"><![CDATA[No Browser Installed~ >_<]]></string>
+    <string name="search_hint">search for movie</string>
 </resources>

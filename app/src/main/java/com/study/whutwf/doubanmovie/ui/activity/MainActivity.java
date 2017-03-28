@@ -1,11 +1,14 @@
 package com.study.whutwf.doubanmovie.ui.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import com.study.whutwf.doubanmovie.R;
 import com.study.whutwf.doubanmovie.ui.fragment.MovieTopFragment;
@@ -65,4 +68,27 @@ public class MainActivity extends BaseActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_go_to_search:
+                return prepareIntent(SearchActivity.class);
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+    }
+
+    private boolean prepareIntent(Class clazz) {
+        startActivity(new Intent(MainActivity.this, clazz));
+        return true;
+    }
 }

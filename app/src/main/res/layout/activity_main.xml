@@ -27,6 +27,5 @@
         android:id="@+id/main_fab_button"
         style="@style/FloatingActionButtonStyle"
         app:layout_behavior="com.study.whutwf.doubanmovie.support.ScrollingFABBehavior"/>
-       />
 
 </android.support.design.widget.CoordinatorLayout>

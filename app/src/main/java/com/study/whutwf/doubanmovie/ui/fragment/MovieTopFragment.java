@@ -239,7 +239,6 @@ public class MovieTopFragment extends Fragment {
                             return true;
                         }
                     });
-
                     //showing popup menu
                     popupMenu.show();
                 }

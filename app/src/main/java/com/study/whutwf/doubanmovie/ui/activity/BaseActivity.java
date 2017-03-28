@@ -16,6 +16,7 @@ public class BaseActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        setTheme(R.style.AppThemeBlue);
         super.onCreate(savedInstanceState);
         setContentView(mLayoutResId);
 
@@ -26,7 +27,7 @@ public class BaseActivity extends AppCompatActivity {
     private void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        setTitle(getString(R.string.app_name));
+//        setTitle(getString(R.string.app_name));
         mToolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
     }
 
