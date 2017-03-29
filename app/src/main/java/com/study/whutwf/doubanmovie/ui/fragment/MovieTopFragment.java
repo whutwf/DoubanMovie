@@ -3,14 +3,12 @@ package com.study.whutwf.doubanmovie.ui.fragment;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,12 +18,8 @@ import android.widget.Toast;
 import com.study.whutwf.doubanmovie.R;
 import com.study.whutwf.doubanmovie.adapter.MovieTopAdapter;
 import com.study.whutwf.doubanmovie.adapter.MovieTopItemViewHolder;
-import com.study.whutwf.doubanmovie.bean.MovieItem;
+import com.study.whutwf.doubanmovie.task.FetchMovieItemTask;
 import com.study.whutwf.doubanmovie.task.ImageDownloader;
-import com.study.whutwf.doubanmovie.utils.FetchMovieItemUtils;
-
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Created by whutwf on 17-3-23.
@@ -39,7 +33,6 @@ public class MovieTopFragment extends Fragment {
     private static final int BITMAP_CACHE_SIZE = 4 * 1024 * 1024;   //4MB,多少为合适？
 
     private RecyclerView mMovieTopRecyclerView;
-    private List<MovieItem> mMovieItemList = new ArrayList<>();
     private MovieTopAdapter mMovieTopAdapter;
 
     private  ImageDownloader<MovieTopItemViewHolder> mMovieTopItemViewHolderImageDownloader;
@@ -57,7 +50,6 @@ public class MovieTopFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new FetchMovieItemTask().execute(mTopStarPage);
 
         Handler responseHandler = new Handler();
 
@@ -88,6 +80,9 @@ public class MovieTopFragment extends Fragment {
         mMovieTopRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_movie_list_recycler_view);
         mMovieTopRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMovieTopRecyclerView.addOnScrollListener(topMovieScrollListener);
+
+        mMovieTopAdapter = new MovieTopAdapter(mMovieTopItemViewHolderImageDownloader);
+        new FetchMovieItemTask(mMovieTopAdapter).execute(mTopStarPage);
         setupAdapter();
         //这个位置要注意啊，要返回自己的v，否则返回空视图
         return v;
@@ -107,7 +102,6 @@ public class MovieTopFragment extends Fragment {
 
     public  void setupAdapter() {
         if (isAdded()) {
-            mMovieTopAdapter = new MovieTopAdapter(mMovieItemList, mMovieTopItemViewHolderImageDownloader);
             mMovieTopRecyclerView.setAdapter(mMovieTopAdapter);
             scrollToPosition();
         }
@@ -156,7 +150,6 @@ public class MovieTopFragment extends Fragment {
             //找到最后显示的位置，一旦滚动就会获得此位置
             mTopLastPositon = layoutManager.findLastVisibleItemPosition();
             getPositionAndOffset();
-            Log.i(TAG, "Last postion:" + mTopLastPositon);
 
             //SCROLL_STATE_IDLE: 视图没有被拖动，处于静止
             //SCROLL_STATE_DRAGGING： 视图正在拖动中
@@ -165,33 +158,15 @@ public class MovieTopFragment extends Fragment {
                     && (mTopLastPositon >= mMovieTopAdapter.getItemCount() - 1)) {
                 mTopStarPage = mTopStarPage + 20;
                 if (mTopStarPage <= END_START_PAGE) {
-                    Toast.makeText(getActivity(), "waiting to load ....", Toast.LENGTH_LONG).show();
-                    new FetchMovieItemTask().execute(mTopStarPage);
+                    Toast.makeText(getActivity(), "waiting to load ....", Toast.LENGTH_SHORT).show();
+                    new FetchMovieItemTask(mMovieTopAdapter).execute(mTopStarPage);
                 } else {
-                    Toast.makeText(getActivity(), "This is the end ....", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(), "This is the end ....", Toast.LENGTH_SHORT).show();
                 }
 
             }
         }
     };
 
-    //注意参数这个位置Integer
-    private class FetchMovieItemTask extends AsyncTask<Integer, Void, List<MovieItem>> {
-        @Override
-        protected List<MovieItem> doInBackground(Integer... params) {
-
-            return new FetchMovieItemUtils().fetchMovieTop250Items(params[0]);
-        }
-
-        @Override
-        protected void onPostExecute(List<MovieItem> movieItems) {
-            if (mMovieItemList != null) {
-                mMovieItemList.addAll(movieItems);
-            } else {
-                mMovieItemList = movieItems;
-            }
-            setupAdapter();
-        }
-    }
 
 }

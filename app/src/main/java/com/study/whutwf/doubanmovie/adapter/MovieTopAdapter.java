@@ -17,6 +17,7 @@ import com.study.whutwf.doubanmovie.support.Check;
 import com.study.whutwf.doubanmovie.support.Constants;
 import com.study.whutwf.doubanmovie.task.ImageDownloader;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -25,11 +26,10 @@ import java.util.List;
 
 public class MovieTopAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-    private List<MovieItem> mMovieItemList;
+    private List<MovieItem> mMovieItemList = new ArrayList<>();
     private ImageDownloader<MovieTopItemViewHolder> mMovieTopItemViewHolderImageDownloader;
 
-    public MovieTopAdapter(List<MovieItem> movieItemList, ImageDownloader<MovieTopItemViewHolder> imageDownloader) {
-        mMovieItemList = movieItemList;
+    public MovieTopAdapter(ImageDownloader<MovieTopItemViewHolder> imageDownloader) {
         mMovieTopItemViewHolderImageDownloader = imageDownloader;
     }
 
@@ -128,4 +128,11 @@ public class MovieTopAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
         context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.movie_share_to)));
     }
 
+    public void addMovieItems(List<MovieItem> movieItems) {
+        if (mMovieItemList != null) {
+            mMovieItemList.addAll(movieItems);
+        } else {
+            mMovieItemList = movieItems;
+        }
+    }
 }
