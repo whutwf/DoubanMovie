@@ -20,8 +20,8 @@ public class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(mLayoutResId);
 
-        initView();
         initToolbar();
+        initView();
     }
 
     private void initToolbar() {
@@ -31,7 +31,7 @@ public class BaseActivity extends AppCompatActivity {
         mToolbar.setTitleTextColor(getResources().getColor(android.R.color.white));
     }
 
-    private void initView() {
+    protected void initView() {
         mCoordinartorLayout = (CoordinatorLayout) findViewById(R.id.coordinator_layout);
     }
 

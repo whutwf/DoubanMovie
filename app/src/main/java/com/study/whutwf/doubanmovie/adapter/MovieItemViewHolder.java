@@ -14,7 +14,7 @@ import com.study.whutwf.doubanmovie.bean.MovieItem;
  * Created by whutwf on 17-3-13.
  */
 
-public class MovieTopItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+public class MovieItemViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
     private TextView mMovieNameTextView;
     private TextView mMovieYearTextView;
@@ -24,9 +24,9 @@ public class MovieTopItemViewHolder extends RecyclerView.ViewHolder implements V
     private AppCompatRatingBar mAppCompatRatingBar;
     private ImageView mOverflowMenuImageView;
 
-    private MovieTopItemViewHolder.ClickResponseListener mClickResponseListener;
+    private MovieItemViewHolder.ClickResponseListener mClickResponseListener;
 
-    public MovieTopItemViewHolder(View itemView, MovieTopItemViewHolder.ClickResponseListener clickResponseListener) {
+    public MovieItemViewHolder(View itemView, MovieItemViewHolder.ClickResponseListener clickResponseListener) {
         super(itemView);
 
         mClickResponseListener = clickResponseListener;
@@ -44,8 +44,8 @@ public class MovieTopItemViewHolder extends RecyclerView.ViewHolder implements V
 
     }
 
-    public static MovieTopItemViewHolder newInstance(View parent, MovieTopItemViewHolder.ClickResponseListener clickResponseListener) {
-        return new MovieTopItemViewHolder(parent, clickResponseListener);
+    public static MovieItemViewHolder newInstance(View parent, MovieItemViewHolder.ClickResponseListener clickResponseListener) {
+        return new MovieItemViewHolder(parent, clickResponseListener);
     }
 
     public void setTopMovieItem(MovieItem movieItem) {

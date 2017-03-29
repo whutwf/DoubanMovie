@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.study.whutwf.doubanmovie.R;
+import com.study.whutwf.doubanmovie.ui.fragment.MovieCommingSoonFragment;
+import com.study.whutwf.doubanmovie.ui.fragment.MovieInTheatersFragment;
 import com.study.whutwf.doubanmovie.ui.fragment.MovieTopFragment;
 
 import java.util.ArrayList;
@@ -25,15 +27,17 @@ public class MainActivity extends BaseActivity {
         setTheme(R.style.AppThemeBlue);
         mLayoutResId = R.layout.activity_main;
         super.onCreate(savedInstanceState);
-
-        initViewPagerAndTabs();
     }
 
-    private void initViewPagerAndTabs() {
+    @Override
+    protected void initView (){
+        super.initView();
         ViewPager viewPager = (ViewPager) findViewById(R.id.main_view_pager);
         viewPager.setOffscreenPageLimit(PAGE_COUNT);
         PagerAdapter pagerAdapter = new PagerAdapter(getSupportFragmentManager());
-        pagerAdapter.addFragment(MovieTopFragment.newInstance(), getString(R.string.tab_1));
+        pagerAdapter.addFragment(MovieTopFragment.newInstance(), getString(R.string.top250));
+        pagerAdapter.addFragment(MovieInTheatersFragment.newInstance(), getString(R.string.in_theaters));
+        pagerAdapter.addFragment(MovieCommingSoonFragment.newInstance(), getString(R.string.coming_soon));
         viewPager.setAdapter(pagerAdapter);
         TabLayout tabLayout = (TabLayout) findViewById(R.id.main_pager_tabs);
         tabLayout.setupWithViewPager(viewPager);

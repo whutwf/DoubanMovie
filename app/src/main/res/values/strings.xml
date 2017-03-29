@@ -1,8 +1,9 @@
 <resources>
     <string name="app_name">DoubanMovie</string>
-    <string name="tab_2">TAB 2</string>
-    <string name="tab_1">TAB 1</string>
-    <string name="tab_3">TAB 3</string>
+    <string name="in_theaters">正在热映</string>
+    <string name="top250">Top250</string>
+    <string name="weekly">口碑榜</string>
+    <string name="coming_soon">即将上映</string>
     <string name="news_preview_image">Image Preview</string>
     <string name="share_this_news">Share this news</string>
     <string name="action_settings">设置</string>

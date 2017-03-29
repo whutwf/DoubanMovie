@@ -12,6 +12,7 @@ import org.json.JSONObject;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -24,18 +25,21 @@ public class FetchMovieItemUtils {
 
     public FetchMovieItemUtils() {}
 
-    public List<MovieItem> fetchMovieTop250Items(Integer page) {
+    public List<MovieItem> fetchMovieItems(HashMap<String, String> params) {
         List<MovieItem> movieItems = new ArrayList<>();
 
-        String url = Uri.parse(Constants.Urls.DOUBAN_MOVIE_TOP250)
+        String url = Uri.parse(params.get("url"))
                 .buildUpon()
-                .appendQueryParameter(Constants.Params.DOUBAN_MOVIE_TOP250_START, page.toString())
+                .appendQueryParameter(Constants.Params.DOUBAN_MOVIE_START, params.get(Constants.Params.DOUBAN_MOVIE_START))
+                .appendQueryParameter(Constants.Params.DOUBAN_MOVIE_QUERY, params.get(Constants.Params.DOUBAN_MOVIE_QUERY))
+                .appendQueryParameter(Constants.Params.DOUBAN_MOVIE_COUNT, params.get(Constants.Params.DOUBAN_MOVIE_COUNT))
+                .appendQueryParameter(Constants.Params.DOUBAN_MOVIE_TAG, params.get(Constants.Params.DOUBAN_MOVIE_TAG))
                 .build().toString();
 
         try {
-            String top250JsonString = NetworkUtils.getUrlString(url);
-            JSONObject top250JsonBody = new JSONObject(top250JsonString);
-            parseTop250Items(movieItems, top250JsonBody);
+            String movieJsonString = NetworkUtils.getUrlString(url);
+            JSONObject movieJsonBody = new JSONObject(movieJsonString);
+            parseMovieItems(movieItems, movieJsonBody);
         }  catch (JSONException e) {
             Log.e(TAG, "Failed to parse Json");
             e.printStackTrace();
@@ -47,7 +51,7 @@ public class FetchMovieItemUtils {
         return movieItems;
     }
 
-    private void parseTop250Items(List<MovieItem> movieItems, JSONObject movieJsonObj) throws JSONException {
+    private void parseMovieItems(List<MovieItem> movieItems, JSONObject movieJsonObj) throws JSONException {
         JSONArray movieSubjects = movieJsonObj.getJSONArray("subjects");
 
         for (int i = 0; i < movieSubjects.length(); ++i) {

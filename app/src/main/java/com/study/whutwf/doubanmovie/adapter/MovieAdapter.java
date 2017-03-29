@@ -24,12 +24,12 @@ import java.util.List;
  * Created by whutwf on 17-3-13.
  */
 
-public class MovieTopAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
     private List<MovieItem> mMovieItemList = new ArrayList<>();
-    private ImageDownloader<MovieTopItemViewHolder> mMovieTopItemViewHolderImageDownloader;
+    private ImageDownloader<MovieItemViewHolder> mMovieTopItemViewHolderImageDownloader;
 
-    public MovieTopAdapter(ImageDownloader<MovieTopItemViewHolder> imageDownloader) {
+    public MovieAdapter(ImageDownloader<MovieItemViewHolder> imageDownloader) {
         mMovieTopItemViewHolderImageDownloader = imageDownloader;
     }
 
@@ -37,7 +37,7 @@ public class MovieTopAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
         final Context context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.top_movie_item, parent, false);
-        return MovieTopItemViewHolder.newInstance(view, new MovieTopItemViewHolder.ClickResponseListener() {
+        return MovieItemViewHolder.newInstance(view, new MovieItemViewHolder.ClickResponseListener() {
             @Override
             public void onWholeClick(int position) {
 
@@ -70,11 +70,11 @@ public class MovieTopAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder viewHolder, int position) {
-        MovieTopItemViewHolder holder = (MovieTopItemViewHolder) viewHolder;
+        MovieItemViewHolder holder = (MovieItemViewHolder) viewHolder;
         MovieItem movieItem = mMovieItemList.get(position);
         holder.setTopMovieItem(movieItem);
 
-        mMovieTopItemViewHolderImageDownloader.queueTargetImage((MovieTopItemViewHolder) viewHolder, movieItem.getImageUrls().get(1));
+        mMovieTopItemViewHolderImageDownloader.queueTargetImage((MovieItemViewHolder) viewHolder, movieItem.getImageUrls().get(1));
 
     }
 

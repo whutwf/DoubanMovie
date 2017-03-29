@@ -3,10 +3,11 @@ package com.study.whutwf.doubanmovie.task;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 
-import com.study.whutwf.doubanmovie.adapter.MovieTopAdapter;
+import com.study.whutwf.doubanmovie.adapter.MovieAdapter;
 import com.study.whutwf.doubanmovie.bean.MovieItem;
 import com.study.whutwf.doubanmovie.utils.FetchMovieItemUtils;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -14,18 +15,18 @@ import java.util.List;
  */
 
 //注意参数这个位置Integer
-public class FetchMovieItemTask extends AsyncTask<Integer, Void, List<MovieItem>> {
+public class FetchMovieItemTask extends AsyncTask<HashMap<String, String>, Void, List<MovieItem>> {
 
-    private MovieTopAdapter mMovieTopAdapter;
+    private MovieAdapter mMovieTopAdapter;
 
     public FetchMovieItemTask(RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
-        this.mMovieTopAdapter = (MovieTopAdapter) adapter;
+        this.mMovieTopAdapter = (MovieAdapter) adapter;
     }
 
     @Override
-    protected List<MovieItem> doInBackground(Integer... params) {
+    protected List<MovieItem> doInBackground(HashMap<String, String>... params) {
 
-        return new FetchMovieItemUtils().fetchMovieTop250Items(params[0]);
+        return new FetchMovieItemUtils().fetchMovieItems(params[0]);
     }
 
     @Override

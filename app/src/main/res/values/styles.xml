@@ -53,7 +53,6 @@
         <item name="tabIndicatorColor">@android:color/white</item>
         <item name="tabIndicatorHeight">6dp</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
-        <item name="tabMode">scrollable</item>
     </style>
 
     <style name="MainPagerStyle" parent="BaseLayoutParam">
