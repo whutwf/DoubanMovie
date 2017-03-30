@@ -9,6 +9,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -21,6 +22,7 @@ import com.study.whutwf.doubanmovie.adapter.MovieItemViewHolder;
 import com.study.whutwf.doubanmovie.support.Constants;
 import com.study.whutwf.doubanmovie.task.FetchMovieItemTask;
 import com.study.whutwf.doubanmovie.task.ImageDownloader;
+import com.study.whutwf.doubanmovie.utils.QueryPreferencesUtils;
 
 import java.util.HashMap;
 
@@ -32,11 +34,12 @@ public class MovieBaseFragment extends Fragment {
 
     private static final String TAG = "MovieBaseFragment";
 
-    protected static final int END_START_PAGE = 240;
-    protected static final int BITMAP_CACHE_SIZE = 4 * 1024 * 1024;   //4MB,多少为合适？
+    protected int END_START_PAGE = 0;   //总共条目数
+    private int COUNT_EVE_PAGE = 20;   //每页显示的条目数
+    private int BITMAP_CACHE_SIZE = 4 * 1024 * 1024;   //4MB,多少为合适？
 
     private RecyclerView mMovieRecyclerView;
-    private MovieAdapter mMovieAdapter;
+    protected MovieAdapter mMovieAdapter;
 
     private  ImageDownloader<MovieItemViewHolder> mMovieItemViewHolderImageDownloader;
     private int mStarPage = 0;
@@ -47,38 +50,35 @@ public class MovieBaseFragment extends Fragment {
 
     public MovieBaseFragment() {
         paramsHashMap.put("url", "");
-        paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_START, "");
+        paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_START, String.valueOf(mStarPage));
         paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_TAG, "");
         paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_COUNT, "");
         paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_QUERY, "");
+
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (paramsHashMap.get("url") != "") {
+        Handler responseHandler = new Handler();
 
-            Handler responseHandler = new Handler();
+        mBitmapLruCache = new LruCache<>(BITMAP_CACHE_SIZE);
+        mMovieItemViewHolderImageDownloader = new ImageDownloader<>(responseHandler, mBitmapLruCache);
+        mMovieItemViewHolderImageDownloader.setImageDownloadListener(
+                new ImageDownloader.ImageDownloadListener<MovieItemViewHolder>() {
+                    @Override
+                    public void onImageDownloaded(MovieItemViewHolder targetHolder, Bitmap bitmap) {
+                        Drawable drawable = new BitmapDrawable(getResources(), bitmap);
+                        targetHolder.setTopMovieCover(drawable);
 
-            mBitmapLruCache = new LruCache<>(BITMAP_CACHE_SIZE);
-            mMovieItemViewHolderImageDownloader = new ImageDownloader<>(responseHandler, mBitmapLruCache);
-            mMovieItemViewHolderImageDownloader.setImageDownloadListener(
-                    new ImageDownloader.ImageDownloadListener<MovieItemViewHolder>() {
-                        @Override
-                        public void onImageDownloaded(MovieItemViewHolder targetHolder, Bitmap bitmap) {
-                            Drawable drawable = new BitmapDrawable(getResources(), bitmap);
-                            targetHolder.setTopMovieCover(drawable);
+                    }
+                });
+        mMovieItemViewHolderImageDownloader.start();
+        mMovieItemViewHolderImageDownloader.getLooper();
 
-                        }
-                    });
-            mMovieItemViewHolderImageDownloader.start();
-            mMovieItemViewHolderImageDownloader.getLooper();
-
-            //转屏保持状态
-            setRetainInstance(true);
-        }
-
+        //转屏保持状态
+        setRetainInstance(true);
     }
 
     @Nullable
@@ -87,18 +87,7 @@ public class MovieBaseFragment extends Fragment {
 
         View v = inflater.inflate(R.layout.fragment_movie_list, container, false);
 
-        if (paramsHashMap.get("url") != "") {
-            mMovieRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_movie_list_recycler_view);
-            mMovieRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-            mMovieRecyclerView.addOnScrollListener(movieScrollListener);
-
-            mMovieAdapter = new MovieAdapter(mMovieItemViewHolderImageDownloader);
-
-            paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_START, String.valueOf(mStarPage));
-            new FetchMovieItemTask(mMovieAdapter).execute(paramsHashMap);
-            setupAdapter();
-        }
-
+        initView(v);
         //这个位置要注意啊，要返回自己的v，否则返回空视图
         return v;
     }
@@ -115,13 +104,40 @@ public class MovieBaseFragment extends Fragment {
         mMovieItemViewHolderImageDownloader.quit();
     }
 
+
+
+    public void initView(View v) {
+        mMovieRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_movie_list_recycler_view);
+        mMovieRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mMovieRecyclerView.addOnScrollListener(movieScrollListener);
+        mMovieAdapter = new MovieAdapter(mMovieItemViewHolderImageDownloader);
+        setupAdapter();
+    }
+
+    public void updateItems() {
+        new FetchMovieItemTask(mMovieAdapter).execute(paramsHashMap);
+    }
+
+    public void updatePageSettings() {
+
+        if (QueryPreferencesUtils.getSignStoredPreference(getActivity(),
+                Constants.Preferences.PAGE_SETTINGS_SIGN) == true) {
+            String totalPage = QueryPreferencesUtils.getStoredPreference(getContext(),
+                    Constants.Preferences.PAGE_SETTINGS);
+//        END_START_PAGE = Integer.parseInt(totalPage);
+            Log.i("MovieBaseFragment", "zongggg--------   " + totalPage);
+        } else {
+            Log.i("MovieBaseFragment", "nothing");
+        }
+
+
+    }
+
     public  void setupAdapter() {
         if (isAdded()) {
             mMovieRecyclerView.setAdapter(mMovieAdapter);
         }
     }
-
-
 
     private RecyclerView.OnScrollListener movieScrollListener = new RecyclerView.OnScrollListener() {
 
@@ -149,11 +165,11 @@ public class MovieBaseFragment extends Fragment {
             //SCROLL_STATE_SETTLING： 视图在惯性滚动
             if ((newState == RecyclerView.SCROLL_STATE_IDLE)
                     && (mLastPositon >= mMovieAdapter.getItemCount() - 1)) {
-                mStarPage = mStarPage + 20;
+                mStarPage = mStarPage + COUNT_EVE_PAGE;
                 if (mStarPage <= END_START_PAGE) {
                     Toast.makeText(getActivity(), "waiting to load ....", Toast.LENGTH_SHORT).show();
                     paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_START, String.valueOf(mStarPage));
-                    new FetchMovieItemTask(mMovieAdapter).execute(paramsHashMap);
+                    updateItems();
                     scrollToPosition();
                 } else {
                     Toast.makeText(getActivity(), "This is the end ....", Toast.LENGTH_SHORT).show();

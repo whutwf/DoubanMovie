@@ -20,6 +20,8 @@ public class Constants {
 //        }
 //    };
 
+    public static String total;
+
     public static final class Urls {
         public static final String DOUBAN_MOVIE_API = "https://api.douban.com/v2/movie/";
         //后加?start={page}
@@ -41,6 +43,8 @@ public class Constants {
         public static final String DOUBAN_MOVIE_QUERY = "q";
         public static final String DOUBAN_MOVIE_TAG = "tag";
         public static final String DOUBAN_MOVIE_COUNT = "count";
+
+        public static final String DOUBAN_MOVIE_TOTAL = "total";
     }
 
     public static final class HelpStrings {
@@ -50,4 +54,10 @@ public class Constants {
     public static final class PackageInformation {
         public static final String DOUBAN_PACKAGE_NAME = "com.douban.frodo";
     }
+
+    public static final class Preferences {
+        public static final String PAGE_SETTINGS = "page_settings";
+        public static final String PAGE_SETTINGS_SIGN = "page_settings_sign";
+    }
+
 }

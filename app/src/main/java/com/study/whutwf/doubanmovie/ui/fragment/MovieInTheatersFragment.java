@@ -1,5 +1,7 @@
 package com.study.whutwf.doubanmovie.ui.fragment;
 
+import android.view.View;
+
 import com.study.whutwf.doubanmovie.support.Constants;
 
 /**
@@ -14,5 +16,13 @@ public class MovieInTheatersFragment extends MovieBaseFragment {
 
     public static MovieInTheatersFragment newInstance() {
         return new MovieInTheatersFragment();
+    }
+
+    @Override
+    public void initView(View v) {
+        super.initView(v);
+
+        updateItems();
+//        updatePageSettings();
     }
 }

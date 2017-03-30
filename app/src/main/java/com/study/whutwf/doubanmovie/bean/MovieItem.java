@@ -9,9 +9,11 @@ import java.util.List;
 
 public class MovieItem {
 
+    //电影总数,暂时存储在每一个电影条目中
+    private int mMovieItemCount;
+
     private String mTitle;
     private List<String> mGenres = new ArrayList<>();
-    //rating用什么结构存储
     private String mRating;
     //演员表结构用什么结构存储
     private String mCasts;
@@ -89,4 +91,13 @@ public class MovieItem {
     public void setRating(String rating) {
         mRating = rating;
     }
+
+    public int getMovieItemCount() {
+        return mMovieItemCount;
+    }
+
+    public void setMovieItemCount(int movieItemCount) {
+        mMovieItemCount = movieItemCount;
+    }
+
 }

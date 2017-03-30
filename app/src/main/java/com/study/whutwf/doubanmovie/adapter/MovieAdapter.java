@@ -16,6 +16,7 @@ import com.study.whutwf.doubanmovie.bean.MovieItem;
 import com.study.whutwf.doubanmovie.support.Check;
 import com.study.whutwf.doubanmovie.support.Constants;
 import com.study.whutwf.doubanmovie.task.ImageDownloader;
+import com.study.whutwf.doubanmovie.utils.QueryPreferencesUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,14 +30,17 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     private List<MovieItem> mMovieItemList = new ArrayList<>();
     private ImageDownloader<MovieItemViewHolder> mMovieTopItemViewHolderImageDownloader;
 
+    Context context = null;
+
     public MovieAdapter(ImageDownloader<MovieItemViewHolder> imageDownloader) {
         mMovieTopItemViewHolderImageDownloader = imageDownloader;
     }
 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(final ViewGroup parent, int viewType) {
-        final Context context = parent.getContext();
+        context = parent.getContext();
         View view = LayoutInflater.from(context).inflate(R.layout.top_movie_item, parent, false);
+
         return MovieItemViewHolder.newInstance(view, new MovieItemViewHolder.ClickResponseListener() {
             @Override
             public void onWholeClick(int position) {
@@ -74,7 +78,17 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         MovieItem movieItem = mMovieItemList.get(position);
         holder.setTopMovieItem(movieItem);
 
-        mMovieTopItemViewHolderImageDownloader.queueTargetImage((MovieItemViewHolder) viewHolder, movieItem.getImageUrls().get(1));
+        mMovieTopItemViewHolderImageDownloader
+                .queueTargetImage((MovieItemViewHolder) viewHolder, movieItem.getImageUrls().get(1));
+
+        if (QueryPreferencesUtils.getSignStoredPreference(context,
+                Constants.Preferences.PAGE_SETTINGS_SIGN) == false) {
+            QueryPreferencesUtils.setStoredPreference(context,
+                    Constants.Preferences.PAGE_SETTINGS,
+                    String.valueOf(movieItem.getMovieItemCount()));
+            QueryPreferencesUtils.setSignStoredPreference(context,
+                    Constants.Preferences.PAGE_SETTINGS_SIGN, true);
+        }
 
     }
 

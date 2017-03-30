@@ -19,7 +19,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.activity.SearchActivity"
-                  android:alwaysRetainTaskState="true">
+                  android:parentActivityName=".ui.activity.MainActivity">
         </activity>
     </application>
 

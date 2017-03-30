@@ -1,11 +1,14 @@
 package com.study.whutwf.doubanmovie.ui.fragment;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.SearchView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.study.whutwf.doubanmovie.R;
 import com.study.whutwf.doubanmovie.support.Constants;
@@ -16,9 +19,11 @@ import com.study.whutwf.doubanmovie.support.Constants;
 
 public class MovieSearchFragment extends MovieBaseFragment {
 
+    private static final String TAG = "MovieSearchFragment";
+
     public MovieSearchFragment() {
         super();
-        paramsHashMap.put("url", Constants.Urls.DOUBAN_MOVIE_TOP250);
+        paramsHashMap.put("url", Constants.Urls.DOUBAN_MOVIE_SEARCH);
     }
 
     @Override
@@ -38,15 +43,35 @@ public class MovieSearchFragment extends MovieBaseFragment {
 
         MenuItem searchItem = menu.findItem(R.id.menu_movie_search);
         final SearchView searchView = (SearchView) searchItem.getActionView();
+
+//        AppCompatImageView button =(AppCompatImageView)searchView.findViewById(android.support.v7.appcompat.R.id.search_button);
+
+//        button.setImageResource(R.mipmap.ic_search);
+
+        //搜索的那个X的删除图标也是可以通过这种方式来修改的
+
+        //下面是在搜索栏的字体，设置为白色，默认也是黑色
+
+        TextView textView=(TextView)searchView.findViewById(android.support.v7.appcompat.R.id.search_src_text);
+
+        textView.setTextColor(Color.WHITE);
+        searchView.setIconifiedByDefault(false);
+
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                return false;
+                Log.i(TAG, "QueryTextSubmit: " + query);
+                paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_QUERY, query);
+
+                updateItems();
+//                updatePageSettings();
+                return true;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                return false;
+                Log.i(TAG, "QueryTextChange: " + newText);
+                return true;
             }
         });
 

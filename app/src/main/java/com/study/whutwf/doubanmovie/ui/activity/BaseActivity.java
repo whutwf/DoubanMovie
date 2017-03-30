@@ -24,7 +24,7 @@ public class BaseActivity extends AppCompatActivity {
         initView();
     }
 
-    private void initToolbar() {
+    protected void initToolbar() {
         mToolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
 //        setTitle(getString(R.string.app_name));
