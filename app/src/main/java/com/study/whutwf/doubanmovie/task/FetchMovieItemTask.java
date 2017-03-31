@@ -1,5 +1,6 @@
 package com.study.whutwf.doubanmovie.task;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 
@@ -18,15 +19,19 @@ import java.util.List;
 public class FetchMovieItemTask extends AsyncTask<HashMap<String, String>, Void, List<MovieItem>> {
 
     private MovieAdapter mMovieTopAdapter;
+    private Context mContext;
+    private String mPageTag;
 
-    public FetchMovieItemTask(RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
+    public FetchMovieItemTask(Context context, RecyclerView.Adapter<RecyclerView.ViewHolder> adapter, String tag) {
         this.mMovieTopAdapter = (MovieAdapter) adapter;
+        this.mContext = context;
+        this.mPageTag = tag;
     }
 
     @Override
     protected List<MovieItem> doInBackground(HashMap<String, String>... params) {
 
-        return new FetchMovieItemUtils().fetchMovieItems(params[0]);
+        return new FetchMovieItemUtils(mContext, mPageTag).fetchMovieItems(params[0]);
     }
 
     @Override

@@ -1,9 +1,14 @@
 package com.study.whutwf.doubanmovie.utils;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
 import com.study.whutwf.doubanmovie.bean.MovieItem;
+import com.study.whutwf.doubanmovie.db.MovieItemBaseHelper;
+import com.study.whutwf.doubanmovie.db.MovieItemDbSchema;
 import com.study.whutwf.doubanmovie.support.Constants;
 
 import org.json.JSONArray;
@@ -23,7 +28,15 @@ public class FetchMovieItemUtils {
 
     private static final String TAG = "FetchMovieItemUtils";
 
-    public FetchMovieItemUtils() {}
+    private SQLiteDatabase mDatabase;
+    private String mPageTag;
+
+    public FetchMovieItemUtils(Context context, String tag) {
+        mDatabase = new MovieItemBaseHelper(context, MovieItemDbSchema.MovieItemDb.SqlString.PAGE_INFO)
+                .getWritableDatabase();
+
+        mPageTag = tag;
+    }
 
     public List<MovieItem> fetchMovieItems(HashMap<String, String> params) {
         List<MovieItem> movieItems = new ArrayList<>();
@@ -82,5 +95,12 @@ public class FetchMovieItemUtils {
 
             movieItems.add(movieItem);
         }
+
+
+        ContentValues values = MovieDbUtils.getContentValues(mPageTag,
+                movieJsonObj.getString("count"), movieJsonObj.getString("total"));
+        MovieDbUtils.insert(mDatabase, mPageTag, values);
+        Log.i("Database", "============insert---------------");
+
     }
 }

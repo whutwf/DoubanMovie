@@ -1,10 +1,9 @@
 package com.study.whutwf.doubanmovie.ui.fragment;
 
-import android.util.Log;
 import android.view.View;
 
+import com.study.whutwf.doubanmovie.db.MovieItemDbSchema.MovieItemDb;
 import com.study.whutwf.doubanmovie.support.Constants;
-import com.study.whutwf.doubanmovie.utils.QueryPreferencesUtils;
 
 /**
  * Created by whutwf on 17-3-29.
@@ -13,8 +12,10 @@ import com.study.whutwf.doubanmovie.utils.QueryPreferencesUtils;
 public class MovieTopFragment extends MovieBaseFragment {
 
     public MovieTopFragment() {
-        super();
+
         paramsHashMap.put("url", Constants.Urls.DOUBAN_MOVIE_TOP250);
+
+        mPageTag = MovieItemDb.DbBaseSettings.TABLE_TOP250;
     }
 
     public static MovieTopFragment newInstance() {
@@ -24,15 +25,9 @@ public class MovieTopFragment extends MovieBaseFragment {
     @Override
     public void initView(View v) {
         super.initView(v);
-
-
         updateItems();
-//                updatePageSettings();
-
-        Log.i("MovieBeFragment", "Sign" + QueryPreferencesUtils.getSignStoredPreference(getContext(),
-                Constants.Preferences.PAGE_SETTINGS_SIGN));
-
-
+        setupAdapter();
+        updatePageSettings();
 
     }
 }

@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.TextView;
 
 import com.study.whutwf.doubanmovie.R;
+import com.study.whutwf.doubanmovie.db.MovieItemDbSchema.MovieItemDb;
 import com.study.whutwf.doubanmovie.support.Constants;
 
 /**
@@ -22,8 +23,9 @@ public class MovieSearchFragment extends MovieBaseFragment {
     private static final String TAG = "MovieSearchFragment";
 
     public MovieSearchFragment() {
-        super();
         paramsHashMap.put("url", Constants.Urls.DOUBAN_MOVIE_SEARCH);
+
+        mPageTag = MovieItemDb.DbBaseSettings.TABLE_SEARCH;
     }
 
     @Override
@@ -64,7 +66,8 @@ public class MovieSearchFragment extends MovieBaseFragment {
                 paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_QUERY, query);
 
                 updateItems();
-//                updatePageSettings();
+                setupAdapter();
+                updatePageSettings();
                 return true;
             }
 

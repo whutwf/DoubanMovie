@@ -1,5 +1,7 @@
 package com.study.whutwf.doubanmovie.ui.fragment;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -19,10 +21,13 @@ import android.widget.Toast;
 import com.study.whutwf.doubanmovie.R;
 import com.study.whutwf.doubanmovie.adapter.MovieAdapter;
 import com.study.whutwf.doubanmovie.adapter.MovieItemViewHolder;
+import com.study.whutwf.doubanmovie.db.MovieItemBaseHelper;
+import com.study.whutwf.doubanmovie.db.MovieItemCursorWrapper;
+import com.study.whutwf.doubanmovie.db.MovieItemDbSchema;
 import com.study.whutwf.doubanmovie.support.Constants;
 import com.study.whutwf.doubanmovie.task.FetchMovieItemTask;
 import com.study.whutwf.doubanmovie.task.ImageDownloader;
-import com.study.whutwf.doubanmovie.utils.QueryPreferencesUtils;
+import com.study.whutwf.doubanmovie.utils.MovieDbUtils;
 
 import java.util.HashMap;
 
@@ -47,10 +52,14 @@ public class MovieBaseFragment extends Fragment {
     protected HashMap<String, String> paramsHashMap = new HashMap<>();
     private LruCache<String, Bitmap> mBitmapLruCache;
 
+    private Context mContext;
+    protected String mPageTag;
+    private SQLiteDatabase mDatabase;
+
 
     public MovieBaseFragment() {
         paramsHashMap.put("url", "");
-        paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_START, String.valueOf(mStarPage));
+        paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_START, "");
         paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_TAG, "");
         paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_COUNT, "");
         paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_QUERY, "");
@@ -76,9 +85,16 @@ public class MovieBaseFragment extends Fragment {
                 });
         mMovieItemViewHolderImageDownloader.start();
         mMovieItemViewHolderImageDownloader.getLooper();
+        mMovieAdapter = new MovieAdapter(mMovieItemViewHolderImageDownloader);
+
+        paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_START, String.valueOf(mStarPage));
 
         //转屏保持状态
         setRetainInstance(true);
+
+        mContext = getContext().getApplicationContext();
+        mDatabase = new MovieItemBaseHelper(mContext, MovieItemDbSchema.MovieItemDb.SqlString.PAGE_INFO)
+                .getWritableDatabase();
     }
 
     @Nullable
@@ -110,26 +126,33 @@ public class MovieBaseFragment extends Fragment {
         mMovieRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_movie_list_recycler_view);
         mMovieRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMovieRecyclerView.addOnScrollListener(movieScrollListener);
-        mMovieAdapter = new MovieAdapter(mMovieItemViewHolderImageDownloader);
-        setupAdapter();
     }
 
     public void updateItems() {
-        new FetchMovieItemTask(mMovieAdapter).execute(paramsHashMap);
+        new FetchMovieItemTask(mContext, mMovieAdapter, mPageTag).execute(paramsHashMap);
     }
 
     public void updatePageSettings() {
 
-        if (QueryPreferencesUtils.getSignStoredPreference(getActivity(),
-                Constants.Preferences.PAGE_SETTINGS_SIGN) == true) {
-            String totalPage = QueryPreferencesUtils.getStoredPreference(getContext(),
-                    Constants.Preferences.PAGE_SETTINGS);
-//        END_START_PAGE = Integer.parseInt(totalPage);
-            Log.i("MovieBaseFragment", "zongggg--------   " + totalPage);
-        } else {
-            Log.i("MovieBaseFragment", "nothing");
-        }
+        MovieItemCursorWrapper cursor = MovieDbUtils.queryAll(mDatabase,  mPageTag,
+                MovieItemDbSchema.MovieItemDb.MovieItemCols.TAG + " = ?",
+                new String[] {mPageTag});
 
+        try {
+            if (cursor.getCount() == 0) {
+                END_START_PAGE = 0;
+                COUNT_EVE_PAGE = 20;
+                Log.i("Cursor", "=============每只行=====");
+            } else {
+                cursor.moveToFirst();
+                HashMap<String, String> hashMap = cursor.getPageInfo();
+                END_START_PAGE = Integer.parseInt(hashMap.get(Constants.Params.DOUBAN_MOVIE_TOTAL));
+                COUNT_EVE_PAGE = Integer.parseInt(hashMap.get(Constants.Params.DOUBAN_MOVIE_COUNT));
+                Log.i("Cursor", "total:======" + END_START_PAGE);
+            }
+        } finally {
+            cursor.close();
+        }
 
     }
 

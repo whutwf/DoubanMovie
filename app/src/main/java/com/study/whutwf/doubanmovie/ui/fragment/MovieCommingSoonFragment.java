@@ -2,6 +2,7 @@ package com.study.whutwf.doubanmovie.ui.fragment;
 
 import android.view.View;
 
+import com.study.whutwf.doubanmovie.db.MovieItemDbSchema.MovieItemDb;
 import com.study.whutwf.doubanmovie.support.Constants;
 
 /**
@@ -11,7 +12,10 @@ import com.study.whutwf.doubanmovie.support.Constants;
 public class MovieCommingSoonFragment extends MovieBaseFragment {
 
     public MovieCommingSoonFragment() {
+
         paramsHashMap.put("url", Constants.Urls.DOUBAN_MOVIE_COMING_SOON);
+
+        mPageTag = MovieItemDb.DbBaseSettings.TABLE_COMING_SOON;
     }
 
     public static MovieCommingSoonFragment newInstance() {
@@ -23,6 +27,7 @@ public class MovieCommingSoonFragment extends MovieBaseFragment {
         super.initView(v);
 
         updateItems();
-//        updatePageSettings();
+        setupAdapter();
+        updatePageSettings();
     }
 }
