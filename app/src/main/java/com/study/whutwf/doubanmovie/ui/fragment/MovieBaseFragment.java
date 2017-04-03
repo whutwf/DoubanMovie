@@ -24,6 +24,7 @@ import com.study.whutwf.doubanmovie.adapter.MovieItemViewHolder;
 import com.study.whutwf.doubanmovie.db.MovieItemBaseHelper;
 import com.study.whutwf.doubanmovie.db.MovieItemCursorWrapper;
 import com.study.whutwf.doubanmovie.db.MovieItemDbSchema;
+import com.study.whutwf.doubanmovie.db.MovieItemDbSchema.MovieItemDb;
 import com.study.whutwf.doubanmovie.support.Constants;
 import com.study.whutwf.doubanmovie.task.FetchMovieItemTask;
 import com.study.whutwf.doubanmovie.task.ImageDownloader;
@@ -40,8 +41,8 @@ public class MovieBaseFragment extends Fragment {
     private static final String TAG = "MovieBaseFragment";
 
     protected int END_START_PAGE = 0;   //总共条目数
-    private int COUNT_EVE_PAGE = 20;   //每页显示的条目数
-    private int BITMAP_CACHE_SIZE = 4 * 1024 * 1024;   //4MB,多少为合适？
+    protected int COUNT_EVE_PAGE = 20;   //每页显示的条目数
+    protected int BITMAP_CACHE_SIZE = 4 * 1024 * 1024;   //4MB,多少为合适？
 
     private RecyclerView mMovieRecyclerView;
     protected MovieAdapter mMovieAdapter;
@@ -93,7 +94,7 @@ public class MovieBaseFragment extends Fragment {
         setRetainInstance(true);
 
         mContext = getContext().getApplicationContext();
-        mDatabase = new MovieItemBaseHelper(mContext, MovieItemDbSchema.MovieItemDb.SqlString.PAGE_INFO)
+        mDatabase = new MovieItemBaseHelper(mContext, MovieItemDb.SqlString.PAGE_INFO)
                 .getWritableDatabase();
     }
 
@@ -134,21 +135,21 @@ public class MovieBaseFragment extends Fragment {
 
     public void updatePageSettings() {
 
-        MovieItemCursorWrapper cursor = MovieDbUtils.queryAll(mDatabase,  mPageTag,
-                MovieItemDbSchema.MovieItemDb.MovieItemCols.TAG + " = ?",
+        MovieItemCursorWrapper cursor = MovieDbUtils.queryAll(
+                mDatabase,
+                MovieItemDb.DbBaseSettings.TABLE_PAGE_INFO,
+                MovieItemDb.MovieItemCols.TAG + " = ?",
                 new String[] {mPageTag});
 
         try {
             if (cursor.getCount() == 0) {
                 END_START_PAGE = 0;
                 COUNT_EVE_PAGE = 20;
-                Log.i("Cursor", "=============每只行=====");
             } else {
                 cursor.moveToFirst();
                 HashMap<String, String> hashMap = cursor.getPageInfo();
                 END_START_PAGE = Integer.parseInt(hashMap.get(Constants.Params.DOUBAN_MOVIE_TOTAL));
                 COUNT_EVE_PAGE = Integer.parseInt(hashMap.get(Constants.Params.DOUBAN_MOVIE_COUNT));
-                Log.i("Cursor", "total:======" + END_START_PAGE);
             }
         } finally {
             cursor.close();

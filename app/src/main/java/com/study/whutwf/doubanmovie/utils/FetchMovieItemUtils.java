@@ -8,7 +8,9 @@ import android.util.Log;
 
 import com.study.whutwf.doubanmovie.bean.MovieItem;
 import com.study.whutwf.doubanmovie.db.MovieItemBaseHelper;
+import com.study.whutwf.doubanmovie.db.MovieItemCursorWrapper;
 import com.study.whutwf.doubanmovie.db.MovieItemDbSchema;
+import com.study.whutwf.doubanmovie.db.MovieItemDbSchema.MovieItemDb;
 import com.study.whutwf.doubanmovie.support.Constants;
 
 import org.json.JSONArray;
@@ -32,7 +34,7 @@ public class FetchMovieItemUtils {
     private String mPageTag;
 
     public FetchMovieItemUtils(Context context, String tag) {
-        mDatabase = new MovieItemBaseHelper(context, MovieItemDbSchema.MovieItemDb.SqlString.PAGE_INFO)
+        mDatabase = new MovieItemBaseHelper(context, MovieItemDb.SqlString.PAGE_INFO)
                 .getWritableDatabase();
 
         mPageTag = tag;
@@ -99,8 +101,27 @@ public class FetchMovieItemUtils {
 
         ContentValues values = MovieDbUtils.getContentValues(mPageTag,
                 movieJsonObj.getString("count"), movieJsonObj.getString("total"));
-        MovieDbUtils.insert(mDatabase, mPageTag, values);
-        Log.i("Database", "============insert---------------");
+
+        MovieItemCursorWrapper cursor = MovieDbUtils.queryAll(
+                mDatabase,
+                MovieItemDb.DbBaseSettings.TABLE_PAGE_INFO,
+                MovieItemDb.MovieItemCols.TAG + " = ?",
+                new String[] {mPageTag});
+
+        try {
+            if (cursor.getCount() == 0) {
+                MovieDbUtils.insert(mDatabase, MovieItemDb.DbBaseSettings.TABLE_PAGE_INFO, values);
+                Log.i("DataBase===", "insert");
+            } else {
+                MovieDbUtils.update(mDatabase, MovieItemDb.DbBaseSettings.TABLE_PAGE_INFO, values,
+                        MovieItemDb.MovieItemCols.TAG + " = ?", //注意后面占位符，就出错在这，找了半天
+                        new String[] {mPageTag});
+                Log.i("DataBase===", "update");
+
+            }
+        } finally {
+            cursor.close();
+        }
 
     }
 }

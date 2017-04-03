@@ -1,5 +1,6 @@
 package com.study.whutwf.doubanmovie.ui.fragment;
 
+import android.util.Log;
 import android.view.View;
 
 import com.study.whutwf.doubanmovie.db.MovieItemDbSchema.MovieItemDb;
@@ -28,6 +29,5 @@ public class MovieTopFragment extends MovieBaseFragment {
         updateItems();
         setupAdapter();
         updatePageSettings();
-
     }
 }

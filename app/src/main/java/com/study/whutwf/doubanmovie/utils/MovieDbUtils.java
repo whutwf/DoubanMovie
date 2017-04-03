@@ -39,7 +39,7 @@ public class MovieDbUtils {
         return values;
     }
 
-    public static boolean insert(SQLiteDatabase db, String tableName, ContentValues values) {
+    public static long insert(SQLiteDatabase db, String tableName, ContentValues values) {
 
         /**
          * 第二个参数的作用
@@ -51,11 +51,12 @@ public class MovieDbUtils {
          *            provides the name of nullable column name to explicitly insert a NULL into
          *            in the case where your <code>values</code> is empty.
          */
-        if (db.insert(tableName, null, values) != -1) {
-            return true;
-        } else {
-            return false;
-        }
+        return db.insert(tableName, null, values);
+    }
+
+    public static int update(SQLiteDatabase db, String tableName, ContentValues values,
+                             String whereClause, String[] whereArgs) {
+        return db.update(tableName, values, whereClause, whereArgs);
     }
 
     public static MovieItemCursorWrapper queryAll(SQLiteDatabase db, String tableName,

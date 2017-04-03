@@ -23,7 +23,7 @@ public class Constants {
     public static String total;
 
     public static final class Urls {
-        public static final String DOUBAN_MOVIE_API = "https://api.douban.com/v2/movie/";
+        public static final String DOUBAN_MOVIE_API = "http://api.douban.com/v2/movie/";
         //后加?start={page}
         public static final String DOUBAN_MOVIE_TOP250 = DOUBAN_MOVIE_API + "top250";
         public static final String DOUBAN_MOVIE_SEARCH = DOUBAN_MOVIE_API + "search";

@@ -62,8 +62,8 @@ public class MovieSearchFragment extends MovieBaseFragment {
         searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                Log.i(TAG, "QueryTextSubmit: " + query);
                 paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_QUERY, query);
+                Log.i(TAG, "paramHashMap: " + paramsHashMap);
 
                 updateItems();
                 setupAdapter();
@@ -73,7 +73,6 @@ public class MovieSearchFragment extends MovieBaseFragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                Log.i(TAG, "QueryTextChange: " + newText);
                 return true;
             }
         });
