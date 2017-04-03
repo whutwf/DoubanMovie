@@ -20,7 +20,6 @@ public class Constants {
 //        }
 //    };
 
-    public static String total;
 
     public static final class Urls {
         public static final String DOUBAN_MOVIE_API = "http://api.douban.com/v2/movie/";

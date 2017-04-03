@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -21,6 +22,7 @@ import android.widget.Toast;
 import com.study.whutwf.doubanmovie.R;
 import com.study.whutwf.doubanmovie.adapter.MovieAdapter;
 import com.study.whutwf.doubanmovie.adapter.MovieItemViewHolder;
+import com.study.whutwf.doubanmovie.bean.MovieItem;
 import com.study.whutwf.doubanmovie.db.MovieItemBaseHelper;
 import com.study.whutwf.doubanmovie.db.MovieItemCursorWrapper;
 import com.study.whutwf.doubanmovie.db.MovieItemDbSchema;
@@ -36,7 +38,7 @@ import java.util.HashMap;
  * Created by whutwf on 17-3-23.
  */
 
-public class MovieBaseFragment extends Fragment {
+public class MovieBaseFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private static final String TAG = "MovieBaseFragment";
 
@@ -46,12 +48,13 @@ public class MovieBaseFragment extends Fragment {
 
     private RecyclerView mMovieRecyclerView;
     protected MovieAdapter mMovieAdapter;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     private  ImageDownloader<MovieItemViewHolder> mMovieItemViewHolderImageDownloader;
     private int mStarPage = 0;
 
     protected HashMap<String, String> paramsHashMap = new HashMap<>();
-    private LruCache<String, Bitmap> mBitmapLruCache;
+    protected LruCache<String, Bitmap> mBitmapLruCache;
 
     private Context mContext;
     protected String mPageTag;
@@ -127,6 +130,11 @@ public class MovieBaseFragment extends Fragment {
         mMovieRecyclerView = (RecyclerView) v.findViewById(R.id.fragment_movie_list_recycler_view);
         mMovieRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mMovieRecyclerView.addOnScrollListener(movieScrollListener);
+
+        //SwipeRefreshLayout的使用方式
+        mSwipeRefreshLayout = (SwipeRefreshLayout) v.findViewById(R.id.swipe_refresh_layout);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.colorPrimary);
     }
 
     public void updateItems() {
@@ -232,4 +240,16 @@ public class MovieBaseFragment extends Fragment {
     };
 
 
+    @Override
+    public void onRefresh() {
+//        MovieItem item = mA
+//        updateItems();
+//        if (mSwipeRefreshLayout != null) {
+//            //开始刷新
+//            //false结束刷新
+//            mSwipeRefreshLayout.setRefreshing(true);
+//        }
+//
+//        Log.i("fresh", "=====fresh");
+    }
 }

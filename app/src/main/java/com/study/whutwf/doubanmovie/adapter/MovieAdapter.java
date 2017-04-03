@@ -149,4 +149,14 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mMovieItemList = movieItems;
         }
     }
+
+    public List<MovieItem> getMovieItemList() {
+        return mMovieItemList;
+    }
+
+    public void clearMovieItems() {
+        if (mMovieItemList != null && mMovieItemList.size() > 0) {
+            mMovieItemList.clear();
+        }
+    }
 }

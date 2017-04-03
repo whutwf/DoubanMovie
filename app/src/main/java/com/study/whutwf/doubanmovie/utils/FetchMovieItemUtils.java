@@ -69,7 +69,7 @@ public class FetchMovieItemUtils {
     private void parseMovieItems(List<MovieItem> movieItems, JSONObject movieJsonObj) throws JSONException {
 
         JSONArray movieSubjects = movieJsonObj.getJSONArray("subjects");
-        Constants.total =  movieJsonObj.getString("total");
+
         for (int i = 0; i < movieSubjects.length(); ++i) {
             JSONObject movieSubject = movieSubjects.getJSONObject(i);
 

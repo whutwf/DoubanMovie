@@ -63,7 +63,10 @@ public class MovieSearchFragment extends MovieBaseFragment {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_QUERY, query);
-                Log.i(TAG, "paramHashMap: " + paramsHashMap);
+
+                //是因为存储电影数据的问题，否则就一直在往里面加数据，不是自己想要的
+                //重新搜索清空电影列表
+                mMovieAdapter.clearMovieItems();
 
                 updateItems();
                 setupAdapter();

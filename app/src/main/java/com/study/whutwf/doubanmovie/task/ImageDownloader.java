@@ -78,6 +78,9 @@ public class ImageDownloader<T> extends HandlerThread {
 
     public void clearQueue() {
         mImageRequestHandler.removeMessages(MESSAGE_DOWNLOAD);
+        if (mBitmapLruCache.size() > 0) {
+            mBitmapLruCache.evictAll();
+        }
     }
 
     private void handleRequest(final T target) {
