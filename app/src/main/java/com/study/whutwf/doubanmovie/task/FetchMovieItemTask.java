@@ -6,7 +6,9 @@ import android.support.v7.widget.RecyclerView;
 
 import com.study.whutwf.doubanmovie.adapter.MovieAdapter;
 import com.study.whutwf.doubanmovie.bean.MovieItem;
+import com.study.whutwf.doubanmovie.support.Constants;
 import com.study.whutwf.doubanmovie.utils.FetchMovieItemUtils;
+import com.study.whutwf.doubanmovie.utils.QueryPreferencesUtils;
 
 import java.util.HashMap;
 import java.util.List;
@@ -39,5 +41,9 @@ public class FetchMovieItemTask extends AsyncTask<HashMap<String, String>, Void,
         //在这里进行更新UI,使用notifyDataSetChanged()通知数据更新
         mMovieTopAdapter.addMovieItems(movieItems);
         mMovieTopAdapter.notifyDataSetChanged();
+
+        QueryPreferencesUtils.setStoredPreference(mContext,
+                mPageTag + Constants.ExtraIntentString.TARGET_LAST_RESULT_ID,
+                movieItems.get(0).getId());
     }
 }

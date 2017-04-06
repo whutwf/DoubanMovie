@@ -1,0 +1,74 @@
+package com.study.whutwf.doubanmovie.service;
+
+import android.app.IntentService;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.util.Log;
+
+import com.study.whutwf.doubanmovie.bean.MovieItem;
+import com.study.whutwf.doubanmovie.support.Check;
+import com.study.whutwf.doubanmovie.support.Constants;
+import com.study.whutwf.doubanmovie.support.SerializableHashMap;
+import com.study.whutwf.doubanmovie.ui.fragment.MovieSearchFragment;
+import com.study.whutwf.doubanmovie.utils.FetchMovieItemUtils;
+import com.study.whutwf.doubanmovie.utils.QueryPreferencesUtils;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Created by whutwf on 17-4-6.
+ */
+
+public class PollService extends IntentService {
+
+    private static final String TAG = "PollService";
+
+    /**
+     * Creates an IntentService.  Invoked by your subclass's constructor.
+     *
+     */
+    public PollService() {
+        super(TAG);
+    }
+
+    public static Intent newIntent(Context context) {
+        return new Intent(context, PollService.class);
+    }
+
+    @Override
+    protected void onHandleIntent(Intent intent) {
+        if (!Check.isNetWorkAvailableAndConnected(this)) {
+            return;
+        }
+        Log.i(TAG, "Received an intent:" + intent);
+        String targetActivityName = intent.getStringExtra(Constants.ExtraIntentString.TARGET_ACTIVITY_NAME);
+        String pageTag = intent.getStringExtra(Constants.ExtraIntentString.PAGE_TAG);
+        String key = pageTag + Constants.ExtraIntentString.TARGET_LAST_RESULT_ID;
+        String lastResultId = QueryPreferencesUtils.getStoredPreference(this, key);
+
+        Bundle bundle = intent.getExtras();
+        SerializableHashMap serializableHashMap = (SerializableHashMap) bundle.get(Constants.ExtraIntentString.S_HASH_MAP);
+
+        List<MovieItem> items = new ArrayList<>();
+
+        if (!targetActivityName.equals(MovieSearchFragment.TAG)) {
+            items = new FetchMovieItemUtils(this, targetActivityName).fetchMovieItems(serializableHashMap.getMap());
+        }
+        Log.i(TAG, items.size() + "   ");
+        if (items.size() == 0) {
+            return;
+        }
+
+        String resultId = items.get(0).getId();
+        if (resultId.equals(lastResultId)) {
+            Log.i(TAG, "Got an old result" + resultId);
+        } else {
+            Log.i(TAG, "Got a new result" + resultId);
+        }
+
+        QueryPreferencesUtils.setStoredPreference(this, key, resultId);
+
+    }
+}

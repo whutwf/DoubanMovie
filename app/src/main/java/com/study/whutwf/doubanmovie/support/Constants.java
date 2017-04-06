@@ -57,6 +57,14 @@ public class Constants {
     public static final class Preferences {
         public static final String PAGE_SETTINGS = "page_settings";
         public static final String PAGE_SETTINGS_SIGN = "page_settings_sign";
+
+    }
+
+    public static final class ExtraIntentString {
+        public static final String TARGET_LAST_RESULT_ID = "_target_last_result_id";
+        public static final String TARGET_ACTIVITY_NAME = "_target_activity_name";
+        public static final String PAGE_TAG = "page_tag";
+        public static final String S_HASH_MAP = "s_hash_map";
     }
 
 }

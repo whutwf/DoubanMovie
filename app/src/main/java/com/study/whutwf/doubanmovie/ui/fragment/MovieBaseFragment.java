@@ -12,7 +12,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.LruCache;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,10 +21,8 @@ import android.widget.Toast;
 import com.study.whutwf.doubanmovie.R;
 import com.study.whutwf.doubanmovie.adapter.MovieAdapter;
 import com.study.whutwf.doubanmovie.adapter.MovieItemViewHolder;
-import com.study.whutwf.doubanmovie.bean.MovieItem;
 import com.study.whutwf.doubanmovie.db.MovieItemBaseHelper;
 import com.study.whutwf.doubanmovie.db.MovieItemCursorWrapper;
-import com.study.whutwf.doubanmovie.db.MovieItemDbSchema;
 import com.study.whutwf.doubanmovie.db.MovieItemDbSchema.MovieItemDb;
 import com.study.whutwf.doubanmovie.support.Constants;
 import com.study.whutwf.doubanmovie.task.FetchMovieItemTask;
@@ -63,11 +60,10 @@ public class MovieBaseFragment extends Fragment implements SwipeRefreshLayout.On
 
     public MovieBaseFragment() {
         paramsHashMap.put("url", "");
-        paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_START, "");
+        paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_START, "0");
         paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_TAG, "");
         paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_COUNT, "");
         paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_QUERY, "");
-
     }
 
     @Override

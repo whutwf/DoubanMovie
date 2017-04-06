@@ -9,7 +9,6 @@ import android.util.Log;
 import com.study.whutwf.doubanmovie.bean.MovieItem;
 import com.study.whutwf.doubanmovie.db.MovieItemBaseHelper;
 import com.study.whutwf.doubanmovie.db.MovieItemCursorWrapper;
-import com.study.whutwf.doubanmovie.db.MovieItemDbSchema;
 import com.study.whutwf.doubanmovie.db.MovieItemDbSchema.MovieItemDb;
 import com.study.whutwf.doubanmovie.support.Constants;
 
@@ -32,12 +31,14 @@ public class FetchMovieItemUtils {
 
     private SQLiteDatabase mDatabase;
     private String mPageTag;
+    private Context mContext;
 
     public FetchMovieItemUtils(Context context, String tag) {
         mDatabase = new MovieItemBaseHelper(context, MovieItemDb.SqlString.PAGE_INFO)
                 .getWritableDatabase();
 
         mPageTag = tag;
+        mContext = context;
     }
 
     public List<MovieItem> fetchMovieItems(HashMap<String, String> params) {

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
+import android.net.ConnectivityManager;
 
 import java.util.List;
 
@@ -40,5 +41,18 @@ public class Check {
             return false;
         }
 
+    }
+
+    public static boolean isNetWorkAvailableAndConnected(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        //后台服务网络是否可用
+        boolean isNetWorkAvailable = cm.getActiveNetworkInfo() != null;
+        //网络是否连接
+        //需要ACCESS_NETWORK_STATE权限
+        boolean isNetWorkConnected = isNetWorkAvailable &&
+                cm.getActiveNetworkInfo().isConnected();
+
+        return isNetWorkConnected;
     }
 }
