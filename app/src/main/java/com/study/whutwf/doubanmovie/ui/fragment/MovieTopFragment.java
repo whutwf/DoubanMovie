@@ -17,6 +17,7 @@ import com.study.whutwf.doubanmovie.support.SerializableHashMap;
 public class MovieTopFragment extends MovieBaseFragment {
 
     public static final String TAG = "MovieTopFragment";
+
     private SerializableHashMap mSerializableHashMap = new SerializableHashMap();
 
     public MovieTopFragment() {
@@ -40,6 +41,7 @@ public class MovieTopFragment extends MovieBaseFragment {
         Intent i = PollService.newIntent(getActivity());
         i.putExtra(Constants.ExtraIntentString.TARGET_ACTIVITY_NAME, TAG);
         i.putExtra(Constants.ExtraIntentString.PAGE_TAG, MovieItemDb.DbBaseSettings.TABLE_TOP250);
+        i.putExtra(Constants.ExtraIntentString.NOTIFIACTION_ID, Constants.NotificationId.MOVIE_TOP_250);
 
         //使用bundle传递序列化对象(HashMap)
         Bundle bundle=new Bundle();
@@ -47,6 +49,7 @@ public class MovieTopFragment extends MovieBaseFragment {
         i.putExtras(bundle);
 
         getActivity().startService(i);
+//        ServiceAlarm.setServiceAlarm(getContext(), i, true);
     }
 
     @Override

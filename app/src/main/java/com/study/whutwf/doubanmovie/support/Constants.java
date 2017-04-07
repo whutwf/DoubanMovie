@@ -65,6 +65,14 @@ public class Constants {
         public static final String TARGET_ACTIVITY_NAME = "_target_activity_name";
         public static final String PAGE_TAG = "page_tag";
         public static final String S_HASH_MAP = "s_hash_map";
+        public static final String NOTIFIACTION_ID = "notification_id";
+    }
+
+    public static final class NotificationId {
+        public static final int MOVIE_TOP_250 = 0;
+        public static final int MOVIE_IN_THEATERS = 1;
+        public static final int MOVIE_COMMING_SOON = 2;
+        public static final int MOVIE_SEARCH = 3;
     }
 
 }

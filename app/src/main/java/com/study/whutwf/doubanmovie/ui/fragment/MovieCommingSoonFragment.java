@@ -39,6 +39,7 @@ public class MovieCommingSoonFragment extends MovieBaseFragment {
         Intent i = PollService.newIntent(getActivity());
         i.putExtra(Constants.ExtraIntentString.TARGET_ACTIVITY_NAME, TAG);
         i.putExtra(Constants.ExtraIntentString.PAGE_TAG, MovieItemDb.DbBaseSettings.TABLE_COMING_SOON);
+        i.putExtra(Constants.ExtraIntentString.NOTIFIACTION_ID, Constants.NotificationId.MOVIE_COMMING_SOON);
 
         Bundle bundle=new Bundle();
         bundle.putSerializable(Constants.ExtraIntentString.S_HASH_MAP, mSerializableHashMap);

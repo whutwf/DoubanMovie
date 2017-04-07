@@ -1,6 +1,7 @@
 package com.study.whutwf.doubanmovie.ui.activity;
 
 import android.content.Intent;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
@@ -21,6 +22,10 @@ import java.util.List;
 public class MainActivity extends BaseActivity {
 
     private static final int PAGE_COUNT = 3;
+
+    public static Intent newIntent(Context context) {
+        return new Intent(context, MainActivity.class);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

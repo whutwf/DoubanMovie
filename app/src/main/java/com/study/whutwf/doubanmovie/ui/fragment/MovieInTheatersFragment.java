@@ -40,6 +40,7 @@ public class MovieInTheatersFragment extends MovieBaseFragment {
         Intent i = PollService.newIntent(getActivity());
         i.putExtra(Constants.ExtraIntentString.TARGET_ACTIVITY_NAME, TAG);
         i.putExtra(Constants.ExtraIntentString.PAGE_TAG, MovieItemDb.DbBaseSettings.TABLE_IN_THEATERS);
+        i.putExtra(Constants.ExtraIntentString.NOTIFIACTION_ID, Constants.NotificationId.MOVIE_IN_THEATERS);
 
         Bundle bundle=new Bundle();
         bundle.putSerializable(Constants.ExtraIntentString.S_HASH_MAP, mSerializableHashMap);
