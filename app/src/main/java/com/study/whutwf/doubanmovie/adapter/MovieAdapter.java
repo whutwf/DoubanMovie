@@ -16,6 +16,7 @@ import com.study.whutwf.doubanmovie.bean.MovieItem;
 import com.study.whutwf.doubanmovie.support.Check;
 import com.study.whutwf.doubanmovie.support.Constants;
 import com.study.whutwf.doubanmovie.task.ImageDownloader;
+import com.study.whutwf.doubanmovie.ui.activity.MoviePageActivity;
 import com.study.whutwf.doubanmovie.utils.QueryPreferencesUtils;
 
 import java.util.ArrayList;
@@ -104,11 +105,12 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     private void openMovieDetails(Context context, String url) {
         //===============有待完善当使用过一次客户端，是否标记
-        if (Check.isApkInstalled(context, Constants.PackageInformation.DOUBAN_PACKAGE_NAME)) {
-            openWithDouban(context, url);
-        } else {
-            openWithBrowser(context, url);
-        }
+//        if (Check.isApkInstalled(context, Constants.PackageInformation.DOUBAN_PACKAGE_NAME)) {
+//            openWithDouban(context, url);
+//        } else {
+//            openWithBrowser(context, url);
+//        }
+        openWithWebView(context, url);
     }
 
     private void openWithBrowser(Context context, String url) {
@@ -119,6 +121,11 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         } else {
             Toast.makeText(context, context.getString(R.string.no_browser), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    private void openWithWebView(Context context, String url) {
+        Intent i = MoviePageActivity.newIntent(context, Uri.parse(url));
+        context.startActivity(i);
     }
 
     private void openWithDouban(Context context, String url) {
