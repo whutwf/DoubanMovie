@@ -1,16 +1,12 @@
 package com.study.whutwf.doubanmovie.ui.activity;
 
-import android.app.Fragment;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.study.whutwf.doubanmovie.R;
 import com.study.whutwf.doubanmovie.ui.fragment.MoviePageFragment;
-import com.study.whutwf.doubanmovie.ui.fragment.MovieSearchFragment;
 
 public class MoviePageActivity extends BaseActivity {
 
@@ -51,4 +47,15 @@ public class MoviePageActivity extends BaseActivity {
 
     }
 
+    //重载onBackPressed与WebView的goback和canGoback实现网页后退
+    @Override
+    public void onBackPressed() {
+        MoviePageFragment fragment =
+                (MoviePageFragment) getSupportFragmentManager().findFragmentById(R.id.fragment_frame);
+        if (fragment.canGoBack()) {
+            fragment.goBack();
+        } else {
+            super.onBackPressed();
+        }
+    }
 }
