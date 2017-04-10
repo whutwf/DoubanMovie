@@ -69,7 +69,9 @@ public class FetchMovieItemUtils {
 
     private void parseMovieItems(List<MovieItem> movieItems, JSONObject movieJsonObj) throws JSONException {
 
+        //{"msg":"rate_limit_exceeded2: 61.183.225.66","code":112,"request":"GET \/v2\/movie\/coming_soon"}
         JSONArray movieSubjects = movieJsonObj.getJSONArray("subjects");
+//        if (m)
 
         for (int i = 0; i < movieSubjects.length(); ++i) {
             JSONObject movieSubject = movieSubjects.getJSONObject(i);

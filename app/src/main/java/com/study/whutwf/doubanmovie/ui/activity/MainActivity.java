@@ -35,6 +35,13 @@ public class MainActivity extends BaseActivity {
     }
 
     @Override
+    protected void initToolbar() {
+        super.initToolbar();
+        //这里有问题
+        setTitle("");
+    }
+
+    @Override
     protected void initView (){
         super.initView();
         ViewPager viewPager = (ViewPager) findViewById(R.id.main_view_pager);

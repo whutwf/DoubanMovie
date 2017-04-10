@@ -7,6 +7,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
@@ -38,6 +39,8 @@ import java.util.HashMap;
 public class MovieBaseFragment extends Fragment implements SwipeRefreshLayout.OnRefreshListener{
 
     private static final String TAG = "MovieBaseFragment";
+
+    private static final int END_FRESH_SIGNAL = 0;
 
     protected int END_START_PAGE = 0;   //总共条目数
     protected int COUNT_EVE_PAGE = 20;   //每页显示的条目数
@@ -238,14 +241,29 @@ public class MovieBaseFragment extends Fragment implements SwipeRefreshLayout.On
 
     @Override
     public void onRefresh() {
-//        MovieItem item = mA
-//        updateItems();
-//        if (mSwipeRefreshLayout != null) {
-//            //开始刷新
-//            //false结束刷新
-//            mSwipeRefreshLayout.setRefreshing(true);
-//        }
-//
-//        Log.i("fresh", "=====fresh");
+
+        mMovieAdapter.clearMovieItems();
+        paramsHashMap.put(Constants.Params.DOUBAN_MOVIE_START, "0");
+        updateItems();
+        mHandler.sendEmptyMessage(END_FRESH_SIGNAL);
+
+
     }
+
+    //handler
+    private Handler mHandler = new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.what) {
+                case END_FRESH_SIGNAL:
+                    //开始刷新
+                    //false结束刷新
+                    mSwipeRefreshLayout.setRefreshing(false);
+                    break;
+                default:
+                    break;
+            }
+        }
+    };
 }
