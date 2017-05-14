@@ -75,4 +75,8 @@ public class Constants {
         public static final int MOVIE_SEARCH = 3;
     }
 
+    public static final class MessageId {
+        public static final int MOVIE_PAGE_INFO = 1;
+    }
+
 }

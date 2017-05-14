@@ -20,13 +20,13 @@ public class MovieDbUtils {
         ContentValues values = new ContentValues();
         values.put(MovieItemDb.MovieItemCols.ID, movieItem.getId());
         values.put(MovieItemDb.MovieItemCols.TITLE, movieItem.getTitle());
-        values.put(MovieItemDb.MovieItemCols.ORIGINAL_TITLE, movieItem.getOriginalTitle());
+        values.put(MovieItemDb.MovieItemCols.ORIGINAL_TITLE, movieItem.getTitle());
         values.put(MovieItemDb.MovieItemCols.ALT, movieItem.getAlt());
         values.put(MovieItemDb.MovieItemCols.YEAR, movieItem.getYear());
-        values.put(MovieItemDb.MovieItemCols.AVERAGE_RATING, movieItem.getRating());
-        values.put(MovieItemDb.MovieItemCols.IMAGE_SMALL, movieItem.getImageUrls().get(0));
-        values.put(MovieItemDb.MovieItemCols.IMAGE_MEDIUM, movieItem.getImageUrls().get(1));
-        values.put(MovieItemDb.MovieItemCols.IMAGE_LARGE, movieItem.getImageUrls().get(2));
+        values.put(MovieItemDb.MovieItemCols.AVERAGE_RATING, movieItem.getRating().getAverage());
+        values.put(MovieItemDb.MovieItemCols.IMAGE_SMALL, movieItem.getImages().getSmall());
+        values.put(MovieItemDb.MovieItemCols.IMAGE_MEDIUM, movieItem.getImages().getMedium());
+        values.put(MovieItemDb.MovieItemCols.IMAGE_LARGE, movieItem.getImages().getLarge());
 
         return values;
     }
@@ -84,4 +84,6 @@ public class MovieDbUtils {
          */
         return new MovieItemCursorWrapper(db.rawQuery(sql, selectionArgs));
     }
+
+
 }

@@ -54,6 +54,6 @@ public class MovieCommingSoonFragment extends MovieBaseFragment {
 
         updateItems();
         setupAdapter();
-        updatePageSettings();
+       // updatePageSettings();
     }
 }

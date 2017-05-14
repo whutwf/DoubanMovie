@@ -2,48 +2,59 @@ package com.study.whutwf.doubanmovie.task;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+import android.util.Log;
 import android.support.v7.widget.RecyclerView;
 
 import com.study.whutwf.doubanmovie.adapter.MovieAdapter;
-import com.study.whutwf.doubanmovie.bean.MovieItem;
+import com.study.whutwf.doubanmovie.bean.MovieBeanList;
+
+import com.study.whutwf.doubanmovie.handler.MovieHandler;
 import com.study.whutwf.doubanmovie.support.Constants;
 import com.study.whutwf.doubanmovie.utils.FetchMovieItemUtils;
-import com.study.whutwf.doubanmovie.utils.QueryPreferencesUtils;
 
 import java.util.HashMap;
-import java.util.List;
 
 /**
  * Created by whutw on 2017/3/21 0021.
  */
 
 //注意参数这个位置Integer
-public class FetchMovieItemTask extends AsyncTask<HashMap<String, String>, Void, List<MovieItem>> {
+public class FetchMovieItemTask extends AsyncTask<HashMap<String, String>, Void, MovieBeanList> {
 
     private MovieAdapter mMovieTopAdapter;
-    private Context mContext;
-    private String mPageTag;
 
-    public FetchMovieItemTask(Context context, RecyclerView.Adapter<RecyclerView.ViewHolder> adapter, String tag) {
+    private boolean mSend = false;
+    private Handler mHandler;
+
+    public FetchMovieItemTask(RecyclerView.Adapter<RecyclerView.ViewHolder> adapter) {
         this.mMovieTopAdapter = (MovieAdapter) adapter;
-        this.mContext = context;
-        this.mPageTag = tag;
     }
 
     @Override
-    protected List<MovieItem> doInBackground(HashMap<String, String>... params) {
+    protected MovieBeanList doInBackground(HashMap<String, String>... params) {
+        MovieBeanList movieBeanList = new FetchMovieItemUtils().getMovieBeanList(params[0]);
 
-        return new FetchMovieItemUtils(mContext, mPageTag).fetchMovieItems(params[0]);
+        if (mSend == false) {
+            Message message = new Message();
+            MovieHandler handler = MovieHandler.getInstance();
+            Bundle bundle = new Bundle();
+            bundle.putInt(Constants.Params.DOUBAN_MOVIE_TOTAL, movieBeanList.getTotal());
+            bundle.putInt(Constants.Params.DOUBAN_MOVIE_COUNT, movieBeanList.getCount());
+            message.setData(bundle);
+            handler.sendMessage(message);
+            message.what = Constants.MessageId.MOVIE_PAGE_INFO;
+            mSend = true;
+        }
+        return movieBeanList;
     }
 
     @Override
-    protected void onPostExecute(List<MovieItem> movieItems) {
+    protected void onPostExecute(MovieBeanList movieBeanList) {
         //在这里进行更新UI,使用notifyDataSetChanged()通知数据更新
-        mMovieTopAdapter.addMovieItems(movieItems);
+        mMovieTopAdapter.addMovieItems(movieBeanList.getMovieItems());
         mMovieTopAdapter.notifyDataSetChanged();
-
-        QueryPreferencesUtils.setStoredPreference(mContext,
-                mPageTag + Constants.ExtraIntentString.TARGET_LAST_RESULT_ID,
-                movieItems.get(0).getId());
     }
 }

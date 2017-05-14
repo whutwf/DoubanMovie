@@ -6,7 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
-import com.study.whutwf.doubanmovie.bean.MovieItem;
+import com.google.gson.Gson;
+import com.study.whutwf.doubanmovie.bean.MovieBeanList;
 import com.study.whutwf.doubanmovie.db.MovieItemBaseHelper;
 import com.study.whutwf.doubanmovie.db.MovieItemCursorWrapper;
 import com.study.whutwf.doubanmovie.db.MovieItemDbSchema.MovieItemDb;
@@ -29,21 +30,23 @@ public class FetchMovieItemUtils {
 
     private static final String TAG = "FetchMovieItemUtils";
 
-    private SQLiteDatabase mDatabase;
-    private String mPageTag;
-    private Context mContext;
+    //private SQLiteDatabase mDatabase;
+  //  private Context mContext;
+    private MovieBeanList mMovieBeanList;
 
-    public FetchMovieItemUtils(Context context, String tag) {
-        mDatabase = new MovieItemBaseHelper(context, MovieItemDb.SqlString.PAGE_INFO)
-                .getWritableDatabase();
+    public FetchMovieItemUtils() {
 
-        mPageTag = tag;
-        mContext = context;
     }
 
-    public List<MovieItem> fetchMovieItems(HashMap<String, String> params) {
-        List<MovieItem> movieItems = new ArrayList<>();
 
+    public MovieBeanList getMovieBeanList(HashMap<String, String> params) {
+        String movieJsonString = getMovieJsonString(params);
+        Gson gson = new Gson();
+        mMovieBeanList = gson.fromJson(movieJsonString, MovieBeanList.class);
+        return mMovieBeanList;
+    }
+
+    private String getMovieJsonString(HashMap<String, String> params) {
         String url = Uri.parse(params.get("url"))
                 .buildUpon()
                 .appendQueryParameter(Constants.Params.DOUBAN_MOVIE_START, params.get(Constants.Params.DOUBAN_MOVIE_START))
@@ -51,23 +54,17 @@ public class FetchMovieItemUtils {
                 .appendQueryParameter(Constants.Params.DOUBAN_MOVIE_COUNT, params.get(Constants.Params.DOUBAN_MOVIE_COUNT))
                 .appendQueryParameter(Constants.Params.DOUBAN_MOVIE_TAG, params.get(Constants.Params.DOUBAN_MOVIE_TAG))
                 .build().toString();
-
+        String movieJsonString = null;
         try {
-            String movieJsonString = NetworkUtils.getUrlString(url);
-            JSONObject movieJsonBody = new JSONObject(movieJsonString);
-            parseMovieItems(movieItems, movieJsonBody);
-        }  catch (JSONException e) {
-            Log.e(TAG, "Failed to parse Json");
-            e.printStackTrace();
+            movieJsonString = NetworkUtils.getUrlString(url);
         } catch (IOException e) {
-            Log.e(TAG, "Failed to fetch items", e);
+            Log.e(TAG, e.toString());
             e.printStackTrace();
         }
-
-        return movieItems;
+        return movieJsonString;
     }
 
-    private void parseMovieItems(List<MovieItem> movieItems, JSONObject movieJsonObj) throws JSONException {
+   /* private void parseMovieItems(List<MovieItem> movieItems, JSONObject movieJsonObj) throws JSONException {
 
         JSONArray movieSubjects = movieJsonObj.getJSONArray("subjects");
 
@@ -125,4 +122,5 @@ public class FetchMovieItemUtils {
         }
 
     }
+    */
 }

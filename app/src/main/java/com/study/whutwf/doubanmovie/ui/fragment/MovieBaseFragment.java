@@ -1,7 +1,6 @@
 package com.study.whutwf.doubanmovie.ui.fragment;
 
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,6 +12,7 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.LruCache;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,13 +21,11 @@ import android.widget.Toast;
 import com.study.whutwf.doubanmovie.R;
 import com.study.whutwf.doubanmovie.adapter.MovieAdapter;
 import com.study.whutwf.doubanmovie.adapter.MovieItemViewHolder;
-import com.study.whutwf.doubanmovie.db.MovieItemBaseHelper;
-import com.study.whutwf.doubanmovie.db.MovieItemCursorWrapper;
-import com.study.whutwf.doubanmovie.db.MovieItemDbSchema.MovieItemDb;
+
+import com.study.whutwf.doubanmovie.handler.MovieHandler;
 import com.study.whutwf.doubanmovie.support.Constants;
 import com.study.whutwf.doubanmovie.task.FetchMovieItemTask;
 import com.study.whutwf.doubanmovie.task.ImageDownloader;
-import com.study.whutwf.doubanmovie.utils.MovieDbUtils;
 
 import java.util.HashMap;
 
@@ -39,8 +37,8 @@ public class MovieBaseFragment extends Fragment implements SwipeRefreshLayout.On
 
     private static final String TAG = "MovieBaseFragment";
 
-    protected int END_START_PAGE = 0;   //总共条目数
-    protected int COUNT_EVE_PAGE = 20;   //每页显示的条目数
+    public static int END_START_PAGE = 0;   //总共条目数
+    public static int COUNT_EVE_PAGE = 20;   //每页显示的条目数
     protected int BITMAP_CACHE_SIZE = 4 * 1024 * 1024;   //4MB,多少为合适？
 
     private RecyclerView mMovieRecyclerView;
@@ -55,7 +53,8 @@ public class MovieBaseFragment extends Fragment implements SwipeRefreshLayout.On
 
     private Context mContext;
     protected String mPageTag;
-    private SQLiteDatabase mDatabase;
+
+    private MovieHandler mMovieHandler;
 
 
     public MovieBaseFragment() {
@@ -93,8 +92,10 @@ public class MovieBaseFragment extends Fragment implements SwipeRefreshLayout.On
         setRetainInstance(true);
 
         mContext = getContext().getApplicationContext();
-        mDatabase = new MovieItemBaseHelper(mContext, MovieItemDb.SqlString.PAGE_INFO)
-                .getWritableDatabase();
+
+        mMovieHandler = MovieHandler.getInstance();
+
+
     }
 
     @Nullable
@@ -134,32 +135,9 @@ public class MovieBaseFragment extends Fragment implements SwipeRefreshLayout.On
     }
 
     public void updateItems() {
-        new FetchMovieItemTask(mContext, mMovieAdapter, mPageTag).execute(paramsHashMap);
+        new FetchMovieItemTask(mMovieAdapter).execute(paramsHashMap);
     }
 
-    public void updatePageSettings() {
-
-        MovieItemCursorWrapper cursor = MovieDbUtils.queryAll(
-                mDatabase,
-                MovieItemDb.DbBaseSettings.TABLE_PAGE_INFO,
-                MovieItemDb.MovieItemCols.TAG + " = ?",
-                new String[] {mPageTag});
-
-        try {
-            if (cursor.getCount() == 0) {
-                END_START_PAGE = 0;
-                COUNT_EVE_PAGE = 20;
-            } else {
-                cursor.moveToFirst();
-                HashMap<String, String> hashMap = cursor.getPageInfo();
-                END_START_PAGE = Integer.parseInt(hashMap.get(Constants.Params.DOUBAN_MOVIE_TOTAL));
-                COUNT_EVE_PAGE = Integer.parseInt(hashMap.get(Constants.Params.DOUBAN_MOVIE_COUNT));
-            }
-        } finally {
-            cursor.close();
-        }
-
-    }
 
     public  void setupAdapter() {
         if (isAdded()) {
@@ -248,4 +226,5 @@ public class MovieBaseFragment extends Fragment implements SwipeRefreshLayout.On
 //
 //        Log.i("fresh", "=====fresh");
     }
+
 }

@@ -63,7 +63,7 @@ public class PollService extends IntentService {
         Log.i(TAG, "targetName:" + targetActivityName);
 
         if (!targetActivityName.equals(MovieSearchFragment.TAG)) {
-            items = new FetchMovieItemUtils(this, targetActivityName).fetchMovieItems(serializableHashMap.getMap());
+            items = new FetchMovieItemUtils().getMovieBeanList(serializableHashMap.getMap()).getMovieItems();
         }
         Log.i(TAG, items.size() + "   ");
         if (items.size() == 0) {

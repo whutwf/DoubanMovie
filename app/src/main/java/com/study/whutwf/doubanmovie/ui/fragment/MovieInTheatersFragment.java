@@ -55,6 +55,5 @@ public class MovieInTheatersFragment extends MovieBaseFragment {
 
         updateItems();
         setupAdapter();
-        updatePageSettings();
     }
 }

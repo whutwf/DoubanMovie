@@ -3,6 +3,7 @@ package com.study.whutwf.doubanmovie.ui.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.View;
 
 import com.study.whutwf.doubanmovie.db.MovieItemDbSchema.MovieItemDb;
@@ -57,6 +58,6 @@ public class MovieTopFragment extends MovieBaseFragment {
         super.initView(v);
         updateItems();
         setupAdapter();
-        updatePageSettings();
+        Log.i(TAG, END_START_PAGE + "");
     }
 }

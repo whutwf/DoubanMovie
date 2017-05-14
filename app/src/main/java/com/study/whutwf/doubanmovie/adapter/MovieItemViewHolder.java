@@ -50,10 +50,10 @@ public class MovieItemViewHolder extends RecyclerView.ViewHolder implements View
 
     public void setTopMovieItem(MovieItem movieItem) {
         mMovieNameTextView.setText(movieItem.getTitle());
-        mMovieOriginalTitleTextView.setText(movieItem.getOriginalTitle());
+        mMovieOriginalTitleTextView.setText(movieItem.getTitle());
         mMovieYearTextView.setText(movieItem.getYear());
-        mMovieScoreTextView.setText(movieItem.getRating());
-        mAppCompatRatingBar.setRating(Float.parseFloat(movieItem.getRating()) / 2);
+        mMovieScoreTextView.setText(movieItem.getRating().getAverage() + "");
+        mAppCompatRatingBar.setRating((float) (movieItem.getRating().getAverage() / 2));
 
     }
 

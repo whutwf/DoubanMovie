@@ -3,6 +3,7 @@ package com.study.whutwf.doubanmovie.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.study.whutwf.doubanmovie.R;
+import com.study.whutwf.doubanmovie.bean.MovieBeanList;
 import com.study.whutwf.doubanmovie.bean.MovieItem;
 import com.study.whutwf.doubanmovie.support.Check;
 import com.study.whutwf.doubanmovie.support.Constants;
@@ -80,16 +82,7 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         holder.setTopMovieItem(movieItem);
 
         mMovieTopItemViewHolderImageDownloader
-                .queueTargetImage((MovieItemViewHolder) viewHolder, movieItem.getImageUrls().get(1));
-
-        if (QueryPreferencesUtils.getSignStoredPreference(context,
-                Constants.Preferences.PAGE_SETTINGS_SIGN) == false) {
-            QueryPreferencesUtils.setStoredPreference(context,
-                    Constants.Preferences.PAGE_SETTINGS,
-                    String.valueOf(movieItem.getMovieItemCount()));
-            QueryPreferencesUtils.setSignStoredPreference(context,
-                    Constants.Preferences.PAGE_SETTINGS_SIGN, true);
-        }
+                .queueTargetImage((MovieItemViewHolder) viewHolder, movieItem.getImages().getMedium());
 
     }
 
@@ -166,4 +159,5 @@ public class MovieAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             mMovieItemList.clear();
         }
     }
+
 }

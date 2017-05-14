@@ -74,7 +74,6 @@ public class MovieSearchFragment extends MovieBaseFragment {
 
                 updateItems();
                 setupAdapter();
-                updatePageSettings();
                 return true;
             }
 
