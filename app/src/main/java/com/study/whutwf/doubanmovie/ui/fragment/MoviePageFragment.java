@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,7 +63,6 @@ public class MoviePageFragment extends Fragment {
                 if (newProgress == 100) {
                     mProgressBar.setVisibility(View.GONE);
                 } else {
-                    Log.i("progressBar", "progress: " + newProgress);
                     mProgressBar.setVisibility(View.VISIBLE);
                     mProgressBar.setProgress(newProgress);
                 }
@@ -80,14 +78,32 @@ public class MoviePageFragment extends Fragment {
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.startsWith("http") || url.startsWith("https")) {
+                    view.loadUrl(url);
+                }
+
+//                    Uri uri = Uri.parse(url);
+//                    Log.i(ARG_URL, url);
+//                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//                    getContext().startActivity(intent);
+//                }
+
                 //返回false，交由WebView处理
                 //返回true，交由自己处理
-                return false;
+                return true;
             }
         });
 
         mWebView.loadUrl(mUri.toString());
 
         return v;
+    }
+
+    public boolean canGoBack() {
+        return mWebView.canGoBack();
+    }
+
+    public void goBack() {
+        mWebView.goBack();
     }
 }

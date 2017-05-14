@@ -29,7 +29,8 @@
 
         <activity
             android:name=".ui.activity.MoviePageActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize">
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:parentActivityName=".ui.activity.MainActivity">
         </activity>
     </application>
 
